@@ -44,7 +44,7 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
         try:
             req = requests.get('https://nwfilmforum.org/calendar', headers=self.req_headers, params=req_payload)
         except requests.exceptions.RequestException as e:
-            print(e)
+            raise
 
         soup = BeautifulSoup(req.text, 'html.parser')
 
@@ -64,7 +64,7 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 try:
                     film_duration = self._parse_isoduration(film.find("meta", itemprop="duration")["content"])
                 except TypeError as error:
-                    film_duration = 120 * 60 * 60
+                    film_duration = 120 * 60 
                 try:
                     film_url = film.find("meta", itemprop="mainEntityOfPage")["content"]
                 except TypeError as error:

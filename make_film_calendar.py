@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
-# https://icalendar.readthedocs.io/en/latest/index.html
-
 import filmcalendar.filmcalendar
 import filmcalendar.nwff
+import filmcalendar.beacon
 
 
 def main():
-    f = filmcalendar.nwff.FilmCalendarNWFF()
-    f.fetch_films()
-    j = filmcalendar.filmcalendar.FilmCalendar()
-    j.append_calendar(f)
-    j.write("film_calendar.ics")
+    nwff = filmcalendar.nwff.FilmCalendarNWFF()
+    nwff.fetch_films()
+
+    beacon = filmcalendar.beacon.FilmCalendarBeacon()
+    beacon.fetch_films()
+    
+    seattle_films = filmcalendar.filmcalendar.FilmCalendar()
+    seattle_films.append_filmcalendar(nwff)
+    seattle_films.append_filmcalendar(beacon)
+    seattle_films.write("film_calendar.ics")
         
 if __name__ == "__main__":
     main()    
