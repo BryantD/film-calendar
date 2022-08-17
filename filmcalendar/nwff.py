@@ -57,8 +57,7 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 except TypeError as error:
                     raise ValueError("Couldn't find film name") from error
                 try:
-                    timezone = pytz.timezone("US/Pacific")
-                    film_date = timezone.localize(datetime.fromisoformat(film.find("meta", itemprop="startDate")["content"]))
+                    film_date = self.timezone.localize(datetime.fromisoformat(film.find("meta", itemprop="startDate")["content"]))
                 except TypeError as error:
                         raise ValueError("Couldn't find film start time") from error
                 try:

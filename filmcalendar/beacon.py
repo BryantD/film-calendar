@@ -32,8 +32,7 @@ class FilmCalendarBeacon(filmcalendar.FilmCalendar):
                 if film_title != "Rent The Beacon":
                     # Hardcoding a skip for rental slots
                     try:
-                        timezone = pytz.timezone("US/Pacific")
-                        film_date = timezone.localize(datetime.fromisoformat(film.find("section", itemprop="startDate")["content"]))
+                        film_date = self.timezone.localize(datetime.fromisoformat(film.find("section", itemprop="startDate")["content"]))
                     except TypeError as error:
                             raise ValueError("Couldn't find film start time") from error     
                     try:
