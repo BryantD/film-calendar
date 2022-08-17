@@ -15,9 +15,8 @@ class FilmCalendarBeacon(filmcalendar.FilmCalendar):
         return super().__str__()
 
     def fetch_films(self):
-        req_payload = {'type': 'film', 'attributes': ''}
         try:
-            req = requests.get('https://thebeacon.film/calendar', headers=self.req_headers, params=req_payload)
+            req = requests.get('https://thebeacon.film/calendar', headers=self.req_headers)
         except requests.exceptions.RequestException as e:
             raise
 
