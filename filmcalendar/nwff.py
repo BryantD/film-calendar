@@ -1,4 +1,4 @@
-from . import filmcalendar 
+from . import filmcalendar
 
 from icalendar import Calendar, Event
 import requests
@@ -6,11 +6,12 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import pytz
 
+
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):
     def __init__(self):
         super().__init__()
         self.theater = "Northwest Film Forum"
-        
+
     def __str__(self):
         return super().__str__()
 
@@ -39,15 +40,19 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
         )
         return int(dt.total_seconds())
 
-    def fetch_films(self):
-        req_payload = {'type': 'film', 'attributes': ''}
+    def _fetch_film_page(self, start_date):
+        req_payload = {"type": "film", "start": start_date.strftime("%Y-%m-%d")}
         try:
-            req = requests.get('https://nwfilmforum.org/calendar', headers=self.req_headers, params=req_payload)
+            req = requests.get(
+                "https://nwfilmforum.org/calendar",
+                headers=self.req_headers,
+                params=req_payload,
+            )
         except requests.exceptions.RequestException as e:
             raise
+            # This should do something more sophisticated, it's a no-op right now
 
-        soup = BeautifulSoup(req.text, 'html.parser')
-
+        soup = BeautifulSoup(req.text, "html.parser")
 
         for day in soup.find_all("div", class_="calendar__grid__col"):
             date = day["data-id"]
@@ -57,13 +62,19 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 except TypeError as error:
                     raise ValueError("Couldn't find film name") from error
                 try:
-                    film_date = self.timezone.localize(datetime.fromisoformat(film.find("meta", itemprop="startDate")["content"]))
+                    film_date = self.timezone.localize(
+                        datetime.fromisoformat(
+                            film.find("meta", itemprop="startDate")["content"]
+                        )
+                    )
                 except TypeError as error:
-                        raise ValueError("Couldn't find film start time") from error
+                    raise ValueError("Couldn't find film start time") from error
                 try:
-                    film_duration = self._parse_isoduration(film.find("meta", itemprop="duration")["content"])
+                    film_duration = self._parse_isoduration(
+                        film.find("meta", itemprop="duration")["content"]
+                    )
                 except TypeError as error:
-                    film_duration = 120 * 60 
+                    film_duration = 120 * 60
                 try:
                     film_url = film.find("meta", itemprop="mainEntityOfPage")["content"]
                 except TypeError as error:
@@ -73,4 +84,23 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 except TypeError as error:
                     film_location = None
 
-                self.add_event(summary=film_title, dtstart=film_date, duration=film_duration, url=film_url, location=film_location)
+                self.add_event(
+                    summary=film_title,
+                    dtstart=film_date,
+                    duration=film_duration,
+                    url=film_url,
+                    location=film_location,
+                )
+
+    def fetch_films(self):
+        start_date = datetime.now() - timedelta(days=datetime.now().isoweekday() - 1)
+        end_date = start_date + timedelta(weeks=8)
+        
+        # Decision: we'll loop eight weeks into the future; I was thinking we could
+        # loop until there are no films in a given week but that happens w/in a month
+        # and I'd rather have a couple months of data than just a week or two
+        
+        while start_date < end_date:
+            self._fetch_film_page(start_date)
+            start_date = start_date + timedelta(days=7)
+        return True
