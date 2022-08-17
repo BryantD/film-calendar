@@ -37,7 +37,7 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
             film_title = film["EventName"]
             film_url = f"{self.base_url}/{film['EventUrl']}"
             film_duration = film["LengthInMinutes"] * 60  # We use seconds everywhere
-            film_location = self.address
+            film_location = f"{self.theater}: {self.address}"
             for showing in film["Schedule"]:
                 film_date = self.timezone.localize(
                     datetime.fromisoformat(showing["StartDateTime"])

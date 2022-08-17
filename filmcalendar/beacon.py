@@ -39,12 +39,13 @@ class FilmCalendarBeacon(filmcalendar.FilmCalendar):
                     except TypeError as error:
                         film_url = None
                     try:
-                        film_location = film.find("span", itemprop="streetAddress").get_text() + ", "
-                        film_location = film_location + film.find("span", itemprop="addressLocality").get_text() + ", "
-                        film_location = film_location + film.find("span", itemprop="addressRegion").get_text() + " "
-                        film_location = film_location + film.find("span", itemprop="postalCode").get_text()
+                        film_street = film.find("span", itemprop="streetAddress").get_text()
+                        film_city = film.find("span", itemprop="addressLocality").get_text()
+                        film_state = film.find("span", itemprop="addressRegion").get_text()
+                        film_zip = film.find("span", itemprop="postalCode").get_text()
+                        film_location = f"{self.theater}: {film_street}, {film_city}, {film_state} {film_zip}"
                     except TypeError as error:
-                        film_location = None
+                        film_location = self.theater
                     film_duration = 120 * 60
 
                     self.add_event(summary=film_title, dtstart=film_date, duration=film_duration, url=film_url, location=film_location)

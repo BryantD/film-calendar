@@ -83,6 +83,7 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                     film_location = film.find("meta", itemprop="address")["content"]
                 except TypeError as error:
                     film_location = None
+                film_location = f"{self.theater}: {film_location}"
 
                 self.add_event(
                     summary=film_title,

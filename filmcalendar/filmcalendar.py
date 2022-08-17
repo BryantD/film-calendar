@@ -34,11 +34,12 @@ class FilmCalendar:
         event.add("summary", summary)
         event.add("dtstart", vDatetime(dtstart))
         event.add("duration", timedelta(seconds=duration))
-        event.add("description", f"{self.theater}\n{url}")
 
         # Optional components
         if url:
             event.add("url", url)
+            event.add("description", url)
+            # Google Calendar doesn't support the URL field
         if location:
             event.add("location", location)
         
