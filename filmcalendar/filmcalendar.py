@@ -1,18 +1,23 @@
 from icalendar import Calendar, Event, vDatetime
 from datetime import datetime, timedelta
+import pytz
 
 
 class FilmCalendar:
     req_headers = {"user-agent": "seattle-movie-calendar/0.1"}
 
     def __init__(self):
+        self.timezone_string = "US/Pacific"
+        self.timezone = pytz.timezone(self.timezone_string)
+        self.theater = ""
+        self.uid_base = "seattle-movies.innocence.com"
+
         self.cal = Calendar()
         self.cal.add("version", "2.0")
         self.cal.add("prodid", "-//Seattle Arthouse Film Calendar//NONSGML Event Calendar//EN")
         self.cal.add("x-wr-calname", "Seattle Arthouse Film Calendar")
-        self.cal.add("x-wr-timezone", "US/Pacific")
-        self.theater = ""
-        self.uid_base = "seattle-movies.innocence.com"
+        self.cal.add("x-wr-timezone", self.timezone_string)
+        
 
     def __str__(self):
         cal_string = self.cal.to_ical()
