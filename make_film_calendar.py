@@ -5,6 +5,7 @@ import argparse
 import filmcalendar.filmcalendar
 import filmcalendar.beacon
 import filmcalendar.centralcinema
+import filmcalendar.grandillusion
 import filmcalendar.nwff
 
 
@@ -14,9 +15,12 @@ def main():
     theaters = [
         "beacon",
         "central",
+        "grandillusion",
         "nwff",
     ]
-    parser.add_argument("--theaters", "-t", nargs="*", help="Theaters to scrape", choices=theaters)
+    parser.add_argument(
+        "--theaters", "-t", nargs="*", help="Theaters to scrape", choices=theaters
+    )
     args = parser.parse_args()
 
     seattle_films = filmcalendar.filmcalendar.FilmCalendar()
@@ -33,6 +37,12 @@ def main():
         central.fetch_films()
         seattle_films.append_filmcalendar(central)
 
+    if not args.theaters or "grandillusion" in args.theaters:
+        print("Scraping Grand Illusion...")
+        grand = filmcalendar.grandillusion.FilmCalendarGrandIllusion()
+        grand.fetch_films()
+        seattle_films.append_filmcalendar(grand)
+
     if not args.theaters or "nwff" in args.theaters:
         print("Scraping NWFF...")
         nwff = filmcalendar.nwff.FilmCalendarNWFF()
@@ -40,7 +50,7 @@ def main():
         seattle_films.append_filmcalendar(nwff)
 
     seattle_films.write("film_calendar.ics")
-        
+
+
 if __name__ == "__main__":
-    main()    
-    
+    main()
