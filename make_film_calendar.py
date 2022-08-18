@@ -7,6 +7,7 @@ import filmcalendar.beacon
 import filmcalendar.centralcinema
 import filmcalendar.grandillusion
 import filmcalendar.nwff
+import filmcalendar.siff
 
 
 def main():
@@ -17,6 +18,7 @@ def main():
         "central",
         "grandillusion",
         "nwff",
+        "siff",
     ]
     parser.add_argument(
         "--theaters", "-t", nargs="*", help="Theaters to scrape", choices=theaters
@@ -48,6 +50,12 @@ def main():
         nwff = filmcalendar.nwff.FilmCalendarNWFF()
         nwff.fetch_films()
         seattle_films.append_filmcalendar(nwff)
+
+    if not args.theaters or "siff" in args.theaters:
+        print("Scraping SIFF...")
+        siff = filmcalendar.siff.FilmCalendarSIFF()
+        siff.fetch_films()
+        seattle_films.append_filmcalendar(siff)
 
     seattle_films.write("film_calendar.ics")
 
