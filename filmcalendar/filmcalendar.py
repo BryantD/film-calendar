@@ -6,7 +6,7 @@ import pytz
 class FilmCalendar:
     req_headers = {"user-agent": "seattle-movie-calendar/0.1"}
 
-    def __init__(self):
+    def __init__(self, calendar_name="Seattle Arthouse Movie Calendar"):
         self.timezone_string = "US/Pacific"
         self.timezone = pytz.timezone(self.timezone_string)
         self.theater = ""
@@ -14,8 +14,8 @@ class FilmCalendar:
 
         self.cal = Calendar()
         self.cal.add("version", "2.0")
-        self.cal.add("prodid", "-//Seattle Arthouse Film Calendar//NONSGML Event Calendar//EN")
-        self.cal.add("x-wr-calname", "Seattle Arthouse Film Calendar")
+        self.cal.add("prodid", f"-//{calendar_name}//NONSGML Event Calendar//EN")
+        self.cal.add("x-wr-calname", calendar_name)
         self.cal.add("x-wr-timezone", self.timezone_string)
         
 
@@ -44,12 +44,12 @@ class FilmCalendar:
             event.add("location", location)
         
         # Auto-generated components
-        event.add("dtstamp", vDatetime(datetime.now()))
+        event.add("dtstamp", vDatetime(datetime.now(tz=self.timezone)))
         
         self.cal.add_component(event)
 
     def write(self, filename="film_calendar.ics"):
-        self.cal.add("last-modified", vDatetime(datetime.now()))
+        self.cal.add("last-modified", vDatetime(datetime.now(tz=self.timezone)))
         event_count = 0
         for event in self.cal.walk(name="vevent"):
             uid_timestamp = datetime.now().strftime("%Y%m%dT%H%M%S")
