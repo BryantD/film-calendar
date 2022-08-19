@@ -44,12 +44,12 @@ class FilmCalendar:
             event.add("location", location)
         
         # Auto-generated components
-        event.add("dtstamp", vDatetime(datetime.now()))
+        event.add("dtstamp", vDatetime(datetime.now(tz=self.timezone)))
         
         self.cal.add_component(event)
 
     def write(self, filename="film_calendar.ics"):
-        self.cal.add("last-modified", vDatetime(datetime.now()))
+        self.cal.add("last-modified", vDatetime(datetime.now(tz=self.timezone)))
         event_count = 0
         for event in self.cal.walk(name="vevent"):
             uid_timestamp = datetime.now().strftime("%Y%m%dT%H%M%S")
