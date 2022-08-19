@@ -94,7 +94,7 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 )
 
     def fetch_films(self):
-        start_date = datetime.now() - timedelta(days=datetime.now().isoweekday() - 1)
+        start_date = datetime.now(tz=self.timezone) - timedelta(days=datetime.now().isoweekday() - 1)
         end_date = start_date + timedelta(weeks=8)
         
         # Decision: we'll loop eight weeks into the future; I was thinking we could

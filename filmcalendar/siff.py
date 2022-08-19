@@ -59,7 +59,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
                     )
 
     def fetch_films(self):
-        start_date = datetime.now()
+        start_date = datetime.now(tz=self.timezone)
         end_date = start_date + timedelta(weeks=5) 
 
         # Decision: we'll loop 5 weeks into the future; that looks like about how far
