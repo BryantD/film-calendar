@@ -24,7 +24,8 @@ def main():
         "--theaters", "-t", nargs="*", help="Theaters to scrape", choices=theaters
     )
     parser.add_argument(
-        "output", help="File name to write to", default="film_calendar.ics")
+        "output", nargs="?", help="File name to write to", default="film_calendar.ics"
+    )
     args = parser.parse_args()
 
     seattle_films = filmcalendar.filmcalendar.FilmCalendar()
