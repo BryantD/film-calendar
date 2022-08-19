@@ -11,8 +11,6 @@ import filmcalendar.siff
 
 
 def main():
-    parser = argparse.ArgumentParser()
-
     theaters = [
         "beacon",
         "central",
@@ -20,9 +18,13 @@ def main():
         "nwff",
         "siff",
     ]
+
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "--theaters", "-t", nargs="*", help="Theaters to scrape", choices=theaters
     )
+    parser.add_argument(
+        "output", help="File name to write to", default="film_calendar.ics")
     args = parser.parse_args()
 
     seattle_films = filmcalendar.filmcalendar.FilmCalendar()
@@ -57,7 +59,7 @@ def main():
         siff.fetch_films()
         seattle_films.append_filmcalendar(siff)
 
-    seattle_films.write("film_calendar.ics")
+    seattle_films.write(args.output)
 
 
 if __name__ == "__main__":
