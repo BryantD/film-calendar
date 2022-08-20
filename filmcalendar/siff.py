@@ -14,7 +14,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
         self.theater = "SIFF"
         self.base_url = "https://www.siff.net"
         self.addresses = {
-            "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA, 98122",
+            "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA 98122",
             "SIFF Film Center": "305 Harrison St, Seattle, WA 98109",
             "SIFF Cinema Uptown": "511 Queen Anne Ave N, Seattle, WA 98109",
         }
