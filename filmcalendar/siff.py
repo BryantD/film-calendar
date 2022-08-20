@@ -48,7 +48,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
                 for screening in film.find_all("a", class_="elevent"):
                     event_json = json.loads(html.unescape(screening["data-screening"]))
                     film_duration = event_json["LengthInMinutes"] * 60
-                    film_date = self.timezone.localize(datetime.fromtimestamp(int(event_json["Showtime"][6:-2])/1000))
+                    film_date = datetime.fromtimestamp(int(event_json["Showtime"][6:-2])/1000, self.timezone)
         
                     self.add_event(
                         summary=film_title,
