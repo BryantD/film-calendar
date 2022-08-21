@@ -1,6 +1,5 @@
 from . import filmcalendar
 
-from icalendar import Calendar, Event
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -30,7 +29,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
                 headers=self.req_headers,
                 params=req_payload,
             )
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             raise
             # This should do something more sophisticated, it's a no-op right now
 
@@ -41,15 +40,19 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
                 film_anchor = film.find("div", class_="small-copy").find("h3").find("a")
                 film_title = film_anchor.get_text().strip()
                 film_url = f"{self.base_url}{film_anchor['href']}"
-        
+
                 film_times = film.find("div", class_="times")
-                film_theater = film_times.find("span", class_="dark-gray-text").get_text().strip()
+                film_theater = (
+                    film_times.find("span", class_="dark-gray-text").get_text().strip()
+                )
                 film_location = f"{self.theater}: {self.addresses[film_theater]}"
                 for screening in film.find_all("a", class_="elevent"):
                     event_json = json.loads(html.unescape(screening["data-screening"]))
                     film_duration = event_json["LengthInMinutes"] * 60
-                    film_date = datetime.fromtimestamp(int(event_json["Showtime"][6:-2])/1000, self.timezone)
-        
+                    film_date = datetime.fromtimestamp(
+                        int(event_json["Showtime"][6:-2]) / 1000, self.timezone
+                    )
+
                     self.add_event(
                         summary=film_title,
                         dtstart=film_date,
@@ -60,7 +63,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
 
     def fetch_films(self):
         start_date = datetime.now(tz=self.timezone)
-        end_date = start_date + timedelta(weeks=5) 
+        end_date = start_date + timedelta(weeks=5)
 
         # Decision: we'll loop 5 weeks into the future; that looks like about how far
         # out SIFF's scheduling goes
@@ -68,5 +71,3 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
             self._fetch_film_page(start_date)
             start_date = start_date + timedelta(days=1)
         return True
-
-

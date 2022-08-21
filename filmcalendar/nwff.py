@@ -1,10 +1,8 @@
 from . import filmcalendar
 
-from icalendar import Calendar, Event
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
-import pytz
 
 
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):
@@ -48,14 +46,13 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 headers=self.req_headers,
                 params=req_payload,
             )
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             raise
             # This should do something more sophisticated, it's a no-op right now
 
         soup = BeautifulSoup(req.text, "html.parser")
 
         for day in soup.find_all("div", class_="calendar__grid__col"):
-            date = day["data-id"]
             for film in day.find_all("div", class_="calendar__item--film"):
                 try:
                     film_title = film.find("meta", itemprop="name")["content"]
@@ -73,15 +70,15 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                     film_duration = self._parse_isoduration(
                         film.find("meta", itemprop="duration")["content"]
                     )
-                except TypeError as error:
+                except TypeError:
                     film_duration = 120 * 60
                 try:
                     film_url = film.find("meta", itemprop="mainEntityOfPage")["content"]
-                except TypeError as error:
+                except TypeError:
                     film_url = None
                 try:
                     film_location = film.find("meta", itemprop="address")["content"]
-                except TypeError as error:
+                except TypeError:
                     film_location = None
                 film_location = f"{self.theater}: {film_location}"
 
@@ -94,13 +91,15 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                 )
 
     def fetch_films(self):
-        start_date = datetime.now(tz=self.timezone) - timedelta(days=datetime.now().isoweekday() - 1)
+        start_date = datetime.now(tz=self.timezone) - timedelta(
+            days=datetime.now().isoweekday() - 1
+        )
         end_date = start_date + timedelta(weeks=8)
-        
+
         # Decision: we'll loop eight weeks into the future; I was thinking we could
         # loop until there are no films in a given week but that happens w/in a month
         # and I'd rather have a couple months of data than just a week or two
-        
+
         while start_date < end_date:
             self._fetch_film_page(start_date)
             start_date = start_date + timedelta(days=7)

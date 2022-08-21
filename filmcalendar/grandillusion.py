@@ -1,10 +1,8 @@
 from . import filmcalendar
 
-from icalendar import Calendar, Event
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
-import pytz
+from datetime import datetime
 
 
 class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
@@ -28,11 +26,11 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
             req = requests.get(
                 "https://grandillusioncinema.org/", headers=self.req_headers
             )
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             raise
 
         soup = BeautifulSoup(req.text, "html.parser")
-        
+
         film_location = f"{self.theater}: {self.address}"
 
         for film in soup.find_all("div", class_="film-teaser--main"):
@@ -46,7 +44,7 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
             try:
                 film_duration_raw = film.find("span", class_="film-length").get_text()
                 film_duration = self._parse_duration(film_duration_raw)
-            except:
+            except TypeError:
                 film_duration = 120 * 60
 
             for screening in film.find("div", class_="screenings").stripped_strings:
@@ -64,5 +62,5 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
                             url=film_url,
                             location=film_location,
                         )
-                    except:
+                    except ValueError as error:
                         raise ValueError("Couldn't parse date and time") from error

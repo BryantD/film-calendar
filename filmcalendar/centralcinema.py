@@ -1,9 +1,8 @@
 from . import filmcalendar
 
-from icalendar import Calendar, Event
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import html
 
@@ -26,7 +25,7 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
                 headers=self.req_headers,
                 params=req_payload,
             )
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             raise
 
         soup = BeautifulSoup(req.text, "html.parser")
