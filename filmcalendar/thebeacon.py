@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 
-class FilmCalendarBeacon(filmcalendar.FilmCalendar):
+class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
     def __init__(self):
         super().__init__()
         self.theater = "The Beacon"
