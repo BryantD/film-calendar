@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 
 
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwds):
+        super().__init__(**kwds)
         self.theater = "Northwest Film Forum"
 
     def __str__(self):

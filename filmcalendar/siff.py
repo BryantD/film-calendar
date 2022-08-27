@@ -8,8 +8,8 @@ import html
 
 
 class FilmCalendarSIFF(filmcalendar.FilmCalendar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwds):
+        super().__init__(**kwds)
         self.theater = "SIFF"
         self.base_url = "https://www.siff.net"
         self.addresses = {

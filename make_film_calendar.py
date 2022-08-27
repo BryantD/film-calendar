@@ -38,7 +38,7 @@ def main():
             theater_module, f"FilmCalendar{theaters[theater].replace(' ', '')}"
         )
 
-        theater_calendar = klass()
+        theater_calendar = klass(calendar_name=f"{theaters[theater]} Movie Calendar")
         theater_calendar.fetch_films()
         theater_calendar.write(f"{theater}.ics")
         seattle_films.append_filmcalendar(theater_calendar)

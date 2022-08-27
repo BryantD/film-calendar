@@ -6,8 +6,8 @@ from datetime import datetime
 
 
 class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwds):
+        super().__init__(**kwds)
         self.theater = "Grand Illusion"
         self.address = "1403 NE 50th St., Seattle, WA 98105"
 
