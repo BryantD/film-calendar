@@ -52,43 +52,42 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
 
         soup = BeautifulSoup(req.text, "html.parser")
 
-        for day in soup.find_all("div", class_="calendar__grid__col"):
-            for film in day.find_all("div", class_="calendar__item--film"):
-                try:
-                    film_title = film.find("meta", itemprop="name")["content"]
-                except TypeError as error:
-                    raise ValueError("Couldn't find film name") from error
-                try:
-                    film_date = self.timezone.localize(
-                        datetime.fromisoformat(
-                            film.find("meta", itemprop="startDate")["content"]
-                        )
+        for film in soup.find_all("div", class_="calendar__item--film"):
+            try:
+                film_title = film.find("meta", itemprop="name")["content"]
+            except TypeError as error:
+                raise ValueError("Couldn't find film name") from error
+            try:
+                film_date = self.timezone.localize(
+                    datetime.fromisoformat(
+                        film.find("meta", itemprop="startDate")["content"]
                     )
-                except TypeError as error:
-                    raise ValueError("Couldn't find film start time") from error
-                try:
-                    film_duration = self._parse_isoduration(
-                        film.find("meta", itemprop="duration")["content"]
-                    )
-                except TypeError:
-                    film_duration = 120 * 60
-                try:
-                    film_url = film.find("meta", itemprop="mainEntityOfPage")["content"]
-                except TypeError:
-                    film_url = None
-                try:
-                    film_location = film.find("meta", itemprop="address")["content"]
-                except TypeError:
-                    film_location = None
-                film_location = f"{self.theater}: {film_location}"
-
-                self.add_event(
-                    summary=film_title,
-                    dtstart=film_date,
-                    duration=film_duration,
-                    url=film_url,
-                    location=film_location,
                 )
+            except TypeError as error:
+                raise ValueError("Couldn't find film start time") from error
+            try:
+                film_duration = self._parse_isoduration(
+                    film.find("meta", itemprop="duration")["content"]
+                )
+            except TypeError:
+                film_duration = 120 * 60
+            try:
+                film_url = film.find("meta", itemprop="mainEntityOfPage")["content"]
+            except TypeError:
+                film_url = None
+            try:
+                film_location = film.find("meta", itemprop="address")["content"]
+            except TypeError:
+                film_location = None
+            film_location = f"{self.theater}: {film_location}"
+
+            self.add_event(
+                summary=film_title,
+                dtstart=film_date,
+                duration=film_duration,
+                url=film_url,
+                location=film_location,
+            )
 
     def fetch_films(self):
         start_date = datetime.now(tz=self.timezone) - timedelta(
