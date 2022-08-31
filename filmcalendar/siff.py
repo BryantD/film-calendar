@@ -1,10 +1,11 @@
-from . import filmcalendar
+import html
+import json
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
-import json
-import html
+
+from . import filmcalendar
 
 
 class FilmCalendarSIFF(filmcalendar.FilmCalendar):

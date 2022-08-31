@@ -1,8 +1,9 @@
-from . import filmcalendar
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+
+from . import filmcalendar
 
 
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):

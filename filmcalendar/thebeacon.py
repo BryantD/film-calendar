@@ -1,8 +1,9 @@
-from . import filmcalendar
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+
+from . import filmcalendar
 
 
 class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):

@@ -1,6 +1,7 @@
-from icalendar import Calendar, Event, vDatetime
 from datetime import datetime, timedelta
+
 import pytz
+from icalendar import Calendar, Event, vDatetime
 
 
 class FilmCalendar:
