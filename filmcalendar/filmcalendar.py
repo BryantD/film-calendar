@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import pytz
+import xxhash
 from icalendar import Calendar, Event, vDatetime
 
 
@@ -27,9 +28,7 @@ class FilmCalendar:
         for event in calendar.cal.walk(name="vevent"):
             self.cal.add_component(event)
 
-    def add_event(
-        self, summary=None, dtstart=None, url=None, duration=120 * 60, location=None
-    ):
+    def add_event(self, summary, dtstart, url, duration=120 * 60, location=None):
         event = Event()
 
         # Required components
@@ -48,17 +47,14 @@ class FilmCalendar:
         # Auto-generated components
         event.add("dtstamp", vDatetime(datetime.now(tz=self.timezone)))
 
+        uid_hash = xxhash.xxh64()
+        uid_hash.update(f"{dtstart}-{url}")
+        event.add("uid", uid_hash.hexdigest())
+
         self.cal.add_component(event)
 
     def write(self, filename="film_calendar.ics"):
         self.cal.add("last-modified", vDatetime(datetime.now(tz=self.timezone)))
-        event_count = 0
-        for event in self.cal.walk(name="vevent"):
-            uid_timestamp = datetime.now().strftime("%Y%m%dT%H%M%S")
-            event_count = event_count + 1
-            uid = f"{uid_timestamp}-{event_count}@{self.uid_base}"
-            event.add("uid", uid)
-
         f = open(filename, "wb")
         f.write(self.cal.to_ical())
         f.close()
