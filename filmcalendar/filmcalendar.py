@@ -6,7 +6,8 @@ from icalendar import Calendar, Event, vDatetime
 
 
 class FilmCalendar:
-    req_headers = {"user-agent": "seattle-movie-calendar/0.1"}
+    site_url = "https://seattle-movies.innocence.com/"
+    req_headers = {"user-agent": f"seattle-movie-calendar/1.0 ({site_url})"}
 
     def __init__(self, calendar_name="Seattle Arthouse Movie Calendar"):
         self.timezone_string = "US/Pacific"
