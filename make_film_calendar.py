@@ -46,6 +46,7 @@ def main():
             )
             theater_calendar.fetch_films()
             theater_calendar.write(f"{args.directory}/{theater}.ics")
+            theater_calendar.writerss()
             seattle_films.append_filmcalendar(theater_calendar)
 
         seattle_films.write(f"{args.directory}/film_calendar.ics")
