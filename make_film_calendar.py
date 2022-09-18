@@ -46,10 +46,10 @@ def main():
             )
             theater_calendar.fetch_films()
             theater_calendar.write(f"{args.directory}/{theater}.ics")
-            theater_calendar.writerss()
             seattle_films.append_filmcalendar(theater_calendar)
 
         seattle_films.write(f"{args.directory}/film_calendar.ics")
+        seattle_films.writerss(f"{args.directory}/film_calendar.rss")
 
     else:
         print(f"ERROR: {args.directory} is not a directory")

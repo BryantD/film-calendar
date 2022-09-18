@@ -57,21 +57,24 @@ class FilmCalendar:
         self.cal.add_component(event)
 
     def writerss(self, filename="film_calendar.rss"):
-
         feed = feedgenerator.Rss201rev2Feed(
             title=self.calendar_name,
             link=self.site_url,
             description=self.calendar_name,
             language="en",
         )
+
         for event in self.cal.walk(name="vevent"):
             theater_name = event.decoded("location").decode("utf-8").split(":")[0]
             event_name = event.decoded("summary").decode("utf-8")
-            event_time = vDatetime.from_ical(event["dtstart"].to_ical())
+            event_time = vDatetime.from_ical(event["dtstart"].to_ical()).strftime(
+                "%b %d, %I:%M %p"
+            )
+            event_description = f"{theater_name}: {event_name} ({event_time})"
             feed.add_item(
-                title=event.decoded("summary"),
+                title=event_description,
                 link=event.decoded("url"),
-                description=f"{theater_name}: {event_name} ({event_time})",
+                description=event_description,
                 unique_id=event.decoded("uid"),
                 unique_id_is_permalink=False,
             )
