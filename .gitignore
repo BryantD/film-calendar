@@ -1,4 +1,5 @@
 *.ics
+*.rss
 filmcalendar/__pycache__
 Seattle Film Calendar.bbprojectd
 .DS_Store
