@@ -45,23 +45,26 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
             try:
                 film_duration_raw = film.find("span", class_="film-length").get_text()
                 film_duration = self._parse_duration(film_duration_raw)
-            except TypeError:
+            except (TypeError, AttributeError):
                 film_duration = 120 * 60
 
-            for screening in film.find("div", class_="screenings").stripped_strings:
-                screening_date, screening_times = screening.split(": ")
-                for screening_time in screening_times.split(", "):
-                    try:
-                        film_date = datetime.strptime(
-                            f"{screening_date} {screening_time} {datetime.now().year}",
-                            "%A, %b %d %I:%M %p %Y",
-                        )
-                        self.add_event(
-                            summary=film_title,
-                            dtstart=film_date,
-                            duration=film_duration,
-                            url=film_url,
-                            location=film_location,
-                        )
-                    except ValueError as error:
-                        raise ValueError("Couldn't parse date and time") from error
+            try:
+                for screening in film.find("div", class_="screenings").stripped_strings:
+                    screen_date, screen_times = screening.split(": ")
+                    for screen_time in screen_times.split(", "):
+                        try:
+                            film_date = datetime.strptime(
+                                f"{screen_date} {screen_time} {datetime.now().year}",
+                                "%A, %b %d %I:%M %p %Y",
+                            )
+                            self.add_event(
+                                summary=film_title,
+                                dtstart=film_date,
+                                duration=film_duration,
+                                url=film_url,
+                                location=film_location,
+                            )
+                        except ValueError as error:
+                            raise ValueError("Couldn't parse date and time") from error
+            except AttributeError:
+                next
