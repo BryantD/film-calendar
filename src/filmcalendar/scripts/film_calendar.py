@@ -4,7 +4,7 @@ import importlib
 
 import click
 
-from filmcalendar.filmcalendar import FilmCalendar
+from filmcalendar import FilmCalendar
 
 theater_list = {
     "thebeacon": "The Beacon",
