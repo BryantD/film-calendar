@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name="film_calendar",
+    name="filmcalendar",
     version="1.0.0",
-    py_modules=["film_calendar"],
+    include_package_data=True,
     install_requires=[
         "bs4",
         "Click",
@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "film-calendar = film_calendar:cli",
+            "film-calendar = filmcalendar.scripts.film_calendar:cli",
         ],
     },
 )

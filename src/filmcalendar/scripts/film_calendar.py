@@ -4,7 +4,7 @@ import importlib
 
 import click
 
-import filmcalendar.filmcalendar
+from filmcalendar.filmcalendar import FilmCalendar
 
 theater_list = {
     "thebeacon": "The Beacon",
@@ -34,11 +34,11 @@ def cli(theaters, directory):
     By default, all known theaters are crawled.
     """
 
-    seattle_films = filmcalendar.filmcalendar.FilmCalendar()
+    seattle_films = FilmCalendar()
 
     for theater in theaters:
         print(f"Scraping {theater_list[theater]}")
-        theater_module = importlib.import_module(f"filmcalendar.{theater}")
+        theater_module = importlib.import_module(f"filmcalendar.seattle.{theater}")
         klass = getattr(
             theater_module, f"FilmCalendar{theater_list[theater].replace(' ', '')}"
         )

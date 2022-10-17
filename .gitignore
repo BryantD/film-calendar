@@ -1,7 +1,6 @@
 *.ics
 *.rss
-filmcalendar/__pycache__
+__pycache__
 Seattle Film Calendar.bbprojectd
 .DS_Store
-__pycache__
-film_calendar.egg-info
+*.egg-info
