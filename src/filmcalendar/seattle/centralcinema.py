@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from . import filmcalendar
+from filmcalendar import filmcalendar
 
 
 class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):

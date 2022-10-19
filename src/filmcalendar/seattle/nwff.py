@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 
-from . import filmcalendar
+from filmcalendar import filmcalendar
 
 
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):
