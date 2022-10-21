@@ -11,9 +11,9 @@ Usage: film-calendar [OPTIONS] [DIRECTORY]
   for output files; the default is the current directory.
 
 Options:
-  --theaters [thebeacon|centralcinema|grandillusion|nwff|siff]
-                                  Theaters to crawl
-  --help                          Show this message and exit.
+  --config FILENAME  Configuration file
+  --theater TEXT     Theater to crawl
+  --help             Show this message and exit.
 ```
 
 # Installation
@@ -33,11 +33,41 @@ You should be good. If you want a global install for some reason, you probably k
 
 # Configuration
 
-WRITE THIS CODE.
+You must supply a TOML configuration file to run the included script. Fortunately the format is pretty simple, and the one that comes with the package will work out of the box so you can stop reading now if you don't want to change anything.
 
-# Extension
+It looks like this:
 
-First off, make a new directory in `src/filmcalendar` named after your city, in lowercase. Drop an empty `__init__.py` file in the new directory. The script `film-calendar` will automatically load all the modules & classes in a specified directories, so you'll put all your new code in the new directory and it'll magically work.
+```city = "seattle"
+calendar_name = "Seattle Arthouse Movie Calendar"
+timezone = "US/Pacific"
+
+[Theaters]
+thebeacon = "The Beacon"
+centralcinema = "Central Cinema"
+grandillusion = "Grand Illusion"
+nwff = "NWFF"
+siff = "SIFF"
+```
+
+`city` is the name of the city you're making calendars for. This is only used for finding the right module -- see below for more details on this. It should be lower case; you can use underscores if you feel the need but I wouldn't.
+
+`calendar_name` will be used in the calendar and RSS files. 
+
+`timezone` must be a timezone as understood by [pytz](https://pytz.sourceforge.net/#helpers).
+
+`[Theaters]` is a table used to define module and class names. Each line defines one theater. If we use `shortname = "Full Name"` as an example, `film-calendar` parses the line as follows:
+
+- `shortname.py` will be the name of the theater's module
+- `shortname.ics` will be the name of the generated calendar file
+- `FullName` will be the name of the theater's class (spaces are removed)
+
+This is a bit contrived but it works for me as a naming scheme. Note that I'm not using `Full Name` to construct the theater's name for purposes of generating the calendar name; it should be fairly obvious how to do this if you want to make that extension.
+
+[Uh, is this true? Better re-read your code.]
+
+# Extending the Code
+
+First off, make a new directory in `src/filmcalendar` named after your city, in lowercase. Drop an empty `__init__.py` file in the new directory. As per the Configuration section above, `film-calendar` loads per-theater modules from a specified directory. This is the directory you'll specify.
 
 Second, check out `src/filmcalendar/seattle/centralcinema.py` as a model for your new class.
 
@@ -45,11 +75,11 @@ Second, check out `src/filmcalendar/seattle/centralcinema.py` as a model for you
 
 ### Imports
 
-You may or may not need to import html or json, depending on what kind of parsing you need to do. Personally I leave those imports in everywhere because there's a good chance I'll be parsing json data and unescaping random strings. 
+You may or may not need to import `html` or `json`, depending on what kind of parsing you need to do. Personally I leave those imports in everywhere because there's a good chance I'll be parsing json data and unescaping random strings. 
 
-BeautifulSoup and requests are musts for me, but if you have a different preference for retrieving and parsing Web pages, go for it. Or if you're reading your data from something other than a Web page or even a REST API, you probably won't need the same libraries I did. 
+`BeautifulSoup` and `requests` are musts for me, but if you have a different preference for retrieving and parsing Web pages, go for it. Or if you're reading your data from something other than a Web page or even a REST API, you probably won't need the same libraries I did. 
 
-datetime is necessary, because you're going to call `self.add_event` with one parameter that has to be a datetime object.
+`datetime` is necessary, because you're going to call `self.add_event` with parameters that have to be datetime objects.
 
 ### Class 
 
