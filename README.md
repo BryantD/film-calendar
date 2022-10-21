@@ -60,6 +60,7 @@ siff = "SIFF"
 - `shortname.py` will be the name of the theater's module
 - `shortname.ics` will be the name of generated calendar files
 - `Full Name Movie Calendar` will be the calendar name used in generated calendar and RSS files
+- `Full Name` will be used in the location/description fields for the calendar
 - `FullName` will be the name of the theater's class (spaces are removed)
 
 This is a bit contrived but it works for me as a naming scheme. 
