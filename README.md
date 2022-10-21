@@ -58,12 +58,11 @@ siff = "SIFF"
 `[Theaters]` is a table used to define module and class names. Each line defines one theater. If we use `shortname = "Full Name"` as an example, `film-calendar` parses the line as follows:
 
 - `shortname.py` will be the name of the theater's module
-- `shortname.ics` will be the name of the generated calendar file
+- `shortname.ics` will be the name of generated calendar files
+- `Full Name Movie Calendar` will be the calendar name used in generated calendar and RSS files
 - `FullName` will be the name of the theater's class (spaces are removed)
 
-This is a bit contrived but it works for me as a naming scheme. Note that I'm not using `Full Name` to construct the theater's name for purposes of generating the calendar name; it should be fairly obvious how to do this if you want to make that extension.
-
-[Uh, is this true? Better re-read your code.]
+This is a bit contrived but it works for me as a naming scheme. 
 
 # Extending the Code
 
