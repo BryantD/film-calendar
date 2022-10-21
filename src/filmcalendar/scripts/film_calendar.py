@@ -72,7 +72,9 @@ def cli(config, theater, directory):
         )
 
         theater_calendar = klass(
-            calendar_name=f"{config_data['Theaters'][t]} Movie Calendar"
+            calendar_name=f"{config_data['Theaters'][t]} Movie Calendar",
+            theater_name=config_data["Theaters"][t],
+            timezone=config_data["timezone"],
         )
         theater_calendar.fetch_films()
         theater_calendar.write(f"{directory}/{t}.ics")

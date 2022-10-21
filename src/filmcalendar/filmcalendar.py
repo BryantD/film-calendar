@@ -13,6 +13,7 @@ class FilmCalendar:
     def __init__(
         self,
         calendar_name="Seattle Arthouse Movie Calendar",
+        theater_name="",
         timezone="US/Pacific",
     ):
 
@@ -23,7 +24,6 @@ class FilmCalendar:
             raise pytz.exceptions.UnknownTimeZoneError(
                 f"Timezone {timezone} is unknown by pytz"
             )
-        self.theater = ""
         self.calendar_name = calendar_name
 
         self.cal = Calendar()
