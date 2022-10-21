@@ -31,7 +31,8 @@ theater_list = {
 def cli(theaters, directory):
     """
     This script crawls movie theaters and generates calendar and RSS files.
-    By default, all known theaters are crawled.
+    By default, all known theaters are crawled. Optionally specify DIRECTORY
+    for output files; the default is the current directory.
     """
 
     seattle_films = FilmCalendar()
