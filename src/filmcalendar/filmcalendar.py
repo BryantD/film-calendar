@@ -7,14 +7,12 @@ from icalendar import Calendar, Event, vDatetime
 
 
 class FilmCalendar:
-    site_url = "https://seattle-movies.innocence.com/"
-    req_headers = {"user-agent": f"seattle-movie-calendar/1.0 ({site_url})"}
-
     def __init__(
         self,
-        calendar_name="Seattle Arthouse Movie Calendar",
+        calendar_name="Arthouse Movie Calendar",
         theater_name="",
         timezone="US/Pacific",
+        site_url="https://github.com/BryantD/film-calendar",
     ):
 
         self.timezone_string = timezone
@@ -25,6 +23,10 @@ class FilmCalendar:
                 f"Timezone {timezone} is unknown by pytz"
             )
         self.calendar_name = calendar_name
+
+        self.site_url = site_url
+
+        self.req_headers = {"user-agent": f"movie-calendar/1.1 ({site_url})"}
 
         self.cal = Calendar()
         self.cal.add("version", "2.0")

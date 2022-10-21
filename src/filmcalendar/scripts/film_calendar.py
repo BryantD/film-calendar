@@ -59,7 +59,9 @@ def cli(config, theater, directory):
     config_data = load_config(config.name)
 
     seattle_films = FilmCalendar(
-        calendar_name=config_data["calendar_name"], timezone=config_data["timezone"]
+        calendar_name=config_data["calendar_name"],
+        timezone=config_data["timezone"],
+        site_url=config_data["site_url"],
     )
 
     for t in theater:
@@ -75,6 +77,7 @@ def cli(config, theater, directory):
             calendar_name=f"{config_data['Theaters'][t]} Movie Calendar",
             theater_name=config_data["Theaters"][t],
             timezone=config_data["timezone"],
+            site_url=config_data["site_url"],
         )
         theater_calendar.fetch_films()
         theater_calendar.write(f"{directory}/{t}.ics")
