@@ -1,0 +1,10 @@
+city = "seattle"
+calendar_name = "Seattle Arthouse Movie Calendar"
+timezone = "US/Pacific"
+
+[Theaters]
+thebeacon = "The Beacon"
+centralcinema = "Central Cinema"
+grandillusion = "Grand Illusion"
+nwff = "NWFF"
+siff = "SIFF"

@@ -10,11 +10,20 @@ class FilmCalendar:
     site_url = "https://seattle-movies.innocence.com/"
     req_headers = {"user-agent": f"seattle-movie-calendar/1.0 ({site_url})"}
 
-    def __init__(self, calendar_name="Seattle Arthouse Movie Calendar"):
-        self.timezone_string = "US/Pacific"
-        self.timezone = pytz.timezone(self.timezone_string)
+    def __init__(
+        self,
+        calendar_name="Seattle Arthouse Movie Calendar",
+        timezone="US/Pacific",
+    ):
+
+        self.timezone_string = timezone
+        try:
+            self.timezone = pytz.timezone(self.timezone_string)
+        except pytz.exceptions.UnknownTimeZoneError:
+            raise pytz.exceptions.UnknownTimeZoneError(
+                f"Timezone {timezone} is unknown by pytz"
+            )
         self.theater = ""
-        self.uid_base = "seattle-movies.innocence.com"
         self.calendar_name = calendar_name
 
         self.cal = Calendar()
