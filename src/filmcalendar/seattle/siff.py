@@ -26,7 +26,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
         req_payload = {"view": "list", "date": date.strftime("%Y-%m-%d")}
         try:
             req = requests.get(
-                "https://www.siff.net/calendar",
+                f"{self.base_url}/calendar",
                 headers=self.req_headers,
                 params=req_payload,
             )

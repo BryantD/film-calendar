@@ -19,10 +19,10 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         return super().__str__()
 
     def fetch_films(self):
-        req_payload = {"t": "1"}
+        req_payload = {"t": "", "s": "", "v": "", "st": "null"}
         try:
             req = requests.get(
-                "https://www.goelevent.com/CentralCinema/e/List?s=&v=&t=1&st=null",
+                f"{self.base_url}/CentralCinema/e/List",
                 headers=self.req_headers,
                 params=req_payload,
             )
