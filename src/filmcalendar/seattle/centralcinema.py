@@ -11,7 +11,7 @@ from filmcalendar import filmcalendar
 class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = "Central Cinema"
+        self.theater = kwds["theater_name"]
         self.address = "1411 21st Ave., Seattle, WA 98122"
         self.base_url = "https://www.goelevent.com"
 

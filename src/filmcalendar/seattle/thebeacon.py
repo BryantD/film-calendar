@@ -9,7 +9,7 @@ from filmcalendar import filmcalendar
 class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = "The Beacon"
+        self.theater = kwds["theater_name"]
 
     def __str__(self):
         return super().__str__()

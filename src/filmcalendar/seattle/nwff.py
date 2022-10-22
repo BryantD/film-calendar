@@ -9,7 +9,7 @@ from filmcalendar import filmcalendar
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = "Northwest Film Forum"
+        self.theater = kwds["theater_name"]
 
     def __str__(self):
         return super().__str__()

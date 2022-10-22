@@ -1,0 +1,11 @@
+city = "seattle"
+calendar_name = "Seattle Arthouse Movie Calendar"
+timezone = "US/Pacific"
+site_url = "https://seattle-movies.innocence.com/"
+
+[Theaters]
+thebeacon = "The Beacon"
+centralcinema = "Central Cinema"
+grandillusion = "Grand Illusion"
+nwff = "NWFF"
+siff = "SIFF"

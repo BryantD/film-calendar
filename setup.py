@@ -11,6 +11,7 @@ setup(
         "icalendar ==4.1.0",
         "pytz ==2022.1",
         "requests ==2.28.1",
+        "tomli",
         "xxhash ==3.0.0",
     ],
     entry_points={

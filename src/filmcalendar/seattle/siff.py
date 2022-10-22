@@ -11,13 +11,13 @@ from filmcalendar import filmcalendar
 class FilmCalendarSIFF(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = "SIFF"
-        self.base_url = "https://www.siff.net"
+        self.theater = kwds["theater_name"]
         self.addresses = {
             "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA 98122",
             "SIFF Film Center": "305 Harrison St, Seattle, WA 98109",
             "SIFF Cinema Uptown": "511 Queen Anne Ave N, Seattle, WA 98109",
         }
+        self.base_url = "https://www.siff.net"
 
     def __str__(self):
         return super().__str__()
