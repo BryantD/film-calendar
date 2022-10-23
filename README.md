@@ -87,11 +87,9 @@ The `__init__` and `__str__` functions are pretty cut and dried. I set the vario
 
 `fetch_films` does the hard work. For each showing of a film your scraper finds, call `self.add_event` (inherited from the parent class) with the parameters `summary`, `dtstart`, `duration`, `url`, and `location`. Easy as pie.
 
-`duration` is an integer containing the duration of the movie in seconds.
+`duration` is an timedelta object.
 
 `film_date` is a datetime object.
-
-If you poke around a bit you'll notice that the FilmCalendar class converts `duration` to a timedelta under the hood, and you may wonder why it doesn't expect a timedelta to start with. Isn't that inconsistent? Yes, it is, and I'm writing this note so that I fix it before I roll out the customizability branch.
 
 ## HTML
 
