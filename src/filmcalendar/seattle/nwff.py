@@ -9,7 +9,7 @@ from filmcalendar import filmcalendar
 class FilmCalendarNWFF(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
+        self.base_url = "https://nwfilmforum.org/calendar"
 
     def __str__(self):
         return super().__str__()
@@ -37,13 +37,13 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
         dt = timedelta(
             days=int(days), hours=int(hours), minutes=int(minutes), seconds=int(seconds)
         )
-        return int(dt.total_seconds())
+        return dt
 
     def _fetch_film_page(self, start_date):
         req_payload = {"type": "film", "start": start_date.strftime("%Y-%m-%d")}
         try:
             req = requests.get(
-                "https://nwfilmforum.org/calendar",
+                self.base_url,
                 headers=self.req_headers,
                 params=req_payload,
             )
@@ -71,7 +71,7 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
                     film.find("meta", itemprop="duration")["content"]
                 )
             except TypeError:
-                film_duration = 120 * 60
+                film_duration = timedelta(minutes=120)
             try:
                 film_url = film.find("meta", itemprop="mainEntityOfPage")["content"]
             except TypeError:

@@ -1,6 +1,6 @@
 import html
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,7 +11,6 @@ from filmcalendar import filmcalendar
 class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
         self.address = "1411 21st Ave., Seattle, WA 98122"
         self.base_url = "https://www.goelevent.com"
 
@@ -19,10 +18,10 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         return super().__str__()
 
     def fetch_films(self):
-        req_payload = {"t": "1"}
+        req_payload = {"t": "", "s": "", "v": "", "st": "null"}
         try:
             req = requests.get(
-                "https://www.goelevent.com/CentralCinema/e/List?s=&v=&t=1&st=null",
+                f"{self.base_url}/CentralCinema/e/List",
                 headers=self.req_headers,
                 params=req_payload,
             )
@@ -36,7 +35,7 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         for film in event_json["Events"]:
             film_title = film["EventName"]
             film_url = f"{self.base_url}/{film['EventUrl']}"
-            film_duration = film["LengthInMinutes"] * 60  # We use seconds everywhere
+            film_duration = timedelta(minutes=film["LengthInMinutes"])
             film_location = f"{self.theater}: {self.address}"
             for showing in film["Schedule"]:
                 film_date = self.timezone.localize(

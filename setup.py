@@ -2,8 +2,20 @@ from setuptools import setup
 
 setup(
     name="filmcalendar",
-    version="1.0.0",
+    version="1.0.1",
+    description="Film calendar aggregator",
+    author="Bryant Durrell",
+    author_email="durrell@innocence.com",
+    url="https://github.com/BryantD/film-calendar",
     include_package_data=True,
+    classifiers=[
+        "Development Status :: 5 - Stable",
+        "Environment :: Console",
+        "Intended Audience :: End Users/Desktop",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.8",
+    ],
     install_requires=[
         "beautifulsoup4 ==4.11.1",
         "Click ==8.1.3",
@@ -11,7 +23,7 @@ setup(
         "icalendar ==4.1.0",
         "pytz ==2022.1",
         "requests ==2.28.1",
-        "tomli",
+        "tomli ==2.0.1",
         "xxhash ==3.0.0",
     ],
     entry_points={

@@ -22,7 +22,9 @@ class FilmCalendar:
             raise pytz.exceptions.UnknownTimeZoneError(
                 f"Timezone {timezone} is unknown by pytz"
             )
+
         self.calendar_name = calendar_name
+        self.theater = theater_name
 
         self.site_url = site_url
 
@@ -42,13 +44,20 @@ class FilmCalendar:
         for event in calendar.cal.walk(name="vevent"):
             self.cal.add_component(event)
 
-    def add_event(self, summary, dtstart, url, duration=120 * 60, location=None):
+    def add_event(
+        self,
+        summary,
+        dtstart,
+        url,
+        duration=timedelta(minutes=120),
+        location=None,
+    ):
         event = Event()
 
         # Required components
         event.add("summary", summary)
         event.add("dtstart", vDatetime(dtstart))
-        event.add("duration", timedelta(seconds=duration))
+        event.add("duration", duration)
 
         # Optional components
         if url:

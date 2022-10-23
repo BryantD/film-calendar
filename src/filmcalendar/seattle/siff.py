@@ -11,7 +11,6 @@ from filmcalendar import filmcalendar
 class FilmCalendarSIFF(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
         self.addresses = {
             "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA 98122",
             "SIFF Film Center": "305 Harrison St, Seattle, WA 98109",
@@ -26,7 +25,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
         req_payload = {"view": "list", "date": date.strftime("%Y-%m-%d")}
         try:
             req = requests.get(
-                "https://www.siff.net/calendar",
+                f"{self.base_url}/calendar",
                 headers=self.req_headers,
                 params=req_payload,
             )
@@ -49,7 +48,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
                 film_location = f"{self.theater}: {self.addresses[film_theater]}"
                 for screening in film.find_all("a", class_="elevent"):
                     event_json = json.loads(html.unescape(screening["data-screening"]))
-                    film_duration = event_json["LengthInMinutes"] * 60
+                    film_duration = timedelta(minutes=event_json["LengthInMinutes"])
                     film_date = datetime.fromtimestamp(
                         int(event_json["Showtime"][6:-2]) / 1000, self.timezone
                     )

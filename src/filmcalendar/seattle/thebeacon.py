@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -9,16 +9,14 @@ from filmcalendar import filmcalendar
 class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
+        self.base_url = "https://thebeacon.film"
 
     def __str__(self):
         return super().__str__()
 
     def fetch_films(self):
         try:
-            req = requests.get(
-                "https://thebeacon.film/calendar", headers=self.req_headers
-            )
+            req = requests.get(f"{self.base_url}/calendar", headers=self.req_headers)
         except requests.exceptions.RequestException:
             raise
 
@@ -56,7 +54,7 @@ class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
 
                 except TypeError:
                     film_location = self.theater
-                film_duration = 120 * 60
+                film_duration = timedelta(minutes=120)
 
                 self.add_event(
                     summary=film_title,
