@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -17,9 +17,9 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
     def _parse_duration(self, duration_raw):
         # Return duration in seconds
         if duration_raw[-3:] == "min":
-            return int(duration_raw[:-3]) * 60
+            return timedelta(minutes=int(duration_raw[:-3]))
         else:
-            return 120 * 60
+            return timedelta(minutes=120)
 
     def fetch_films(self):
         try:
@@ -45,7 +45,7 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
                 film_duration_raw = film.find("span", class_="film-length").get_text()
                 film_duration = self._parse_duration(film_duration_raw)
             except (TypeError, AttributeError):
-                film_duration = 120 * 60
+                film_duration = timedelta(minutes=120)
 
             try:
                 for screening in film.find("div", class_="screenings").stripped_strings:

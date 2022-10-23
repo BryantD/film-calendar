@@ -1,6 +1,6 @@
 import html
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -35,7 +35,7 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         for film in event_json["Events"]:
             film_title = film["EventName"]
             film_url = f"{self.base_url}/{film['EventUrl']}"
-            film_duration = film["LengthInMinutes"] * 60  # We use seconds everywhere
+            film_duration = timedelta(minutes=film["LengthInMinutes"])
             film_location = f"{self.theater}: {self.address}"
             for showing in film["Schedule"]:
                 film_date = self.timezone.localize(

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
@@ -54,7 +54,7 @@ class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
 
                 except TypeError:
                     film_location = self.theater
-                film_duration = 120 * 60
+                film_duration = timedelta(minutes=120)
 
                 self.add_event(
                     summary=film_title,
