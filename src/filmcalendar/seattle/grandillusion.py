@@ -9,7 +9,6 @@ from filmcalendar import filmcalendar
 class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
         self.address = "1403 NE 50th St., Seattle, WA 98105"
 
     def __str__(self):

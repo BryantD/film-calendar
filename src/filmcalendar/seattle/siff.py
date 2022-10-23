@@ -11,7 +11,6 @@ from filmcalendar import filmcalendar
 class FilmCalendarSIFF(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
         self.addresses = {
             "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA 98122",
             "SIFF Film Center": "305 Harrison St, Seattle, WA 98109",

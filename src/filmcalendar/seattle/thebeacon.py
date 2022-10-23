@@ -9,7 +9,6 @@ from filmcalendar import filmcalendar
 class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.theater = kwds["theater_name"]
         self.base_url = "https://thebeacon.film"
 
     def __str__(self):

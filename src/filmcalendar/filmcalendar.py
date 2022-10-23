@@ -22,7 +22,9 @@ class FilmCalendar:
             raise pytz.exceptions.UnknownTimeZoneError(
                 f"Timezone {timezone} is unknown by pytz"
             )
+
         self.calendar_name = calendar_name
+        self.theater = theater_name
 
         self.site_url = site_url
 
