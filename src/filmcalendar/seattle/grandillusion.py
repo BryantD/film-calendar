@@ -33,7 +33,7 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
 
         film_location = f"{self.theater}: {self.address}"
 
-        for film in soup.find_all("div", class_="film-teaser--main"):
+        for film in soup.find_all("div", class_="film-teaser"):
             try:
                 film_h2 = film.find("h2", class_="film-teaser--title")
                 film_title = film_h2.get_text()
