@@ -66,7 +66,6 @@ def cli(config, theater, directory):
     )
 
     for t in theater:
-        print(f"Scraping {config_data['Theaters'][t]}")
         theater_module = importlib.import_module(
             f"filmcalendar.{config_data['city']}.{t}"
         )
@@ -83,6 +82,8 @@ def cli(config, theater, directory):
         theater_calendar.fetch_films()
         theater_calendar.write(f"{directory}/{t}.ics")
         seattle_films.append_filmcalendar(theater_calendar)
+
+        print(f"Scraped {config_data['Theaters'][t]} ({len(theater_calendar)} events)")
 
     seattle_films.write(f"{directory}/film_calendar.ics")
     seattle_films.writerss(f"{directory}/film_calendar.rss")
