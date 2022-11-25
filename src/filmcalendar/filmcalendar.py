@@ -40,6 +40,9 @@ class FilmCalendar:
         cal_string = self.cal.to_ical()
         return cal_string.decode("utf-8")
 
+    def __len__(self):
+        return len(self.cal.walk(name="vevent"))
+
     def append_filmcalendar(self, calendar):
         for event in calendar.cal.walk(name="vevent"):
             self.cal.add_component(event)
