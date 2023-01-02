@@ -83,7 +83,8 @@ def cli(config, theater, directory):
         theater_calendar.write(f"{directory}/{t}.ics")
         seattle_films.append_filmcalendar(theater_calendar)
 
-        print(f"Scraped {config_data['Theaters'][t]} ({len(theater_calendar)} events)")
+        if len(theater_calendar) == 0:
+            print(f"No events found for {config_data['Theaters'][t]}!")
 
     seattle_films.write(f"{directory}/film_calendar.ics")
     seattle_films.writerss(f"{directory}/film_calendar.rss")
