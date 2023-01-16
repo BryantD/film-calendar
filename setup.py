@@ -22,7 +22,7 @@ setup(
         "feedgenerator ==2.0.0",
         "pytz ==2022.7",
         "icalendar ==5.0.4",
-        "requests ==2.28.1",
+        "requests ==2.28.2",
         "tomli ==2.0.1",
         "xxhash ==3.2.0",
     ],
