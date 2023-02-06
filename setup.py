@@ -17,7 +17,7 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     install_requires=[
-        "beautifulsoup4 ==4.11.1",
+        "beautifulsoup4 ==4.11.2",
         "Click ==8.1.3",
         "feedgenerator ==2.0.0",
         "pytz ==2022.7.1",
