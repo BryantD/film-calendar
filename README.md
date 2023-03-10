@@ -25,8 +25,6 @@ Also check and make sure you have setuptools installed:
 `python3 -m pip install setuptools`
 
 1. Download the code and make sure you're in the top level directory of the source tree
-1. Run `python3 -m venv venv`
-1. Run `source venv/bin/activate`
 1. Run `python3 -m pip install .`
 
 You should be good. If you want a global install for some reason, you probably know how to modify the above instructions to achieve your desires.
