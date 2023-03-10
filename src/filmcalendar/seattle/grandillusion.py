@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta
 
 import requests
@@ -16,8 +17,8 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
 
     def _parse_duration(self, duration_raw):
         # Return duration in seconds
-        if duration_raw[-3:] == "min":
-            return timedelta(minutes=int(duration_raw[:-3]))
+        if duration_match := re.match(r"^(\d+)", duration_raw):
+            return timedelta(minutes=int(duration_match[0]))
         else:
             return timedelta(minutes=120)
 
@@ -42,7 +43,9 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
                 raise ValueError("Couldn't find film name") from error
 
             try:
-                film_duration_raw = film.find("span", class_="film-length").get_text()
+                film_duration_raw = film.find(
+                    "div", class_="film-teaser--format"
+                ).string.strip()
                 film_duration = self._parse_duration(film_duration_raw)
             except (TypeError, AttributeError):
                 film_duration = timedelta(minutes=120)
@@ -51,6 +54,13 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
                 for screening in film.find("div", class_="screenings").stripped_strings:
                     screen_date, screen_times = screening.split(": ")
                     for screen_time in screen_times.split(", "):
+                        # Bit of a hack to handle a one-off, but it should catch
+                        # future instances of this as well.
+                        if " at " in screen_time:
+                            screen_time = screen_time.split(" at ")[0]
+                            film_location = (
+                                "Check listing for the location of this screening."
+                            )
                         try:
                             film_date = datetime.strptime(
                                 f"{screen_date} {screen_time} {datetime.now().year}",
