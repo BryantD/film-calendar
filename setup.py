@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="filmcalendar",
@@ -7,6 +7,8 @@ setup(
     author="Bryant Durrell",
     author_email="durrell@innocence.com",
     url="https://github.com/BryantD/film-calendar",
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     include_package_data=True,
     classifiers=[
         "Development Status :: 5 - Stable",
@@ -32,3 +34,5 @@ setup(
         ],
     },
 )
+
+print(find_packages())
