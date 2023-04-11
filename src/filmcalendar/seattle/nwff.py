@@ -22,7 +22,6 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
         return n, s
 
     def _parse_isoduration(self, s):
-
         # Remove prefix
         s = s.split("P")[-1]
 
@@ -59,13 +58,24 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
             except TypeError as error:
                 raise ValueError("Couldn't find film name") from error
             try:
-                film_date = self.timezone.localize(
-                    datetime.fromisoformat(
-                        film.find("meta", itemprop="startDate")["content"]
-                    )
-                )
+                film_date_raw = film.find("meta", itemprop="startDate")["content"]
             except TypeError as error:
-                raise ValueError("Couldn't find film start time") from error
+                raise ValueError(
+                    (
+                        f"Couldn't find film start time for {film_title}",
+                        f" on {start_date.strftime('%Y-%m-%d')}",
+                    )
+                ) from error
+            try:
+                if film_date_raw[-1] == "T":
+                    film_date_raw += "10:00:00"
+                film_date = self.timezone.localize(
+                    datetime.fromisoformat(film_date_raw)
+                )
+            except ValueError as error:
+                raise ValueError(
+                    f"Error parsing start time {film_date_raw} for {film_title}"
+                ) from error
             try:
                 film_duration = self._parse_isoduration(
                     film.find("meta", itemprop="duration")["content"]
