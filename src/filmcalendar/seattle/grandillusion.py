@@ -32,10 +32,10 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
 
         soup = BeautifulSoup(req.text, "html.parser")
 
-        for film in soup.find_all("div", class_="film-teaser"):
+        for film in soup.find_all("div", class_="film-card"):
             film_location = f"{self.theater}: {self.address}"
             try:
-                film_h2 = film.find("h2", class_="film-teaser--title")
+                film_h2 = film.find("h2", class_="film-card--title")
                 film_title = film_h2.get_text()
                 film_url = film_h2.find("a")["href"]
             except TypeError as error:
@@ -43,14 +43,16 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
 
             try:
                 film_duration_raw = film.find(
-                    "div", class_="film-teaser--format"
+                    "div", class_="film-card--format"
                 ).string.strip()
                 film_duration = self._parse_duration(film_duration_raw)
             except (TypeError, AttributeError):
                 film_duration = timedelta(minutes=120)
 
             try:
-                for screening in film.find("div", class_="screenings").stripped_strings:
+                for screening in film.find(
+                    "div", class_="film-card--screenings"
+                ).stripped_strings:
                     screen_date, screen_times = screening.split(": ")
                     for screen_time in screen_times.split(", "):
                         # Bit of a hack to handle a one-off, but it should catch
