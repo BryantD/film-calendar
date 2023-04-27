@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="filmcalendar",
-    version="1.1.1",
+    version="1.1.2",
     description="Film calendar aggregator",
     author="Bryant Durrell",
     author_email="durrell@innocence.com",
