@@ -15,6 +15,11 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
             "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA 98122",
             "SIFF Film Center": "305 Harrison St, Seattle, WA 98109",
             "SIFF Cinema Uptown": "511 Queen Anne Ave N, Seattle, WA 98109",
+            # Following locations are for SIFF 2023
+            "Paramount Theatre": "911 Pine St, Seattle, WA 98101",
+            "AMC Pacific Place": "600 Pine St #400, Seattle, WA 98101",
+            "Ark Lodge Cinemas": "4816 Rainier Ave S, Seattle, WA 98118",
+            "Shoreline Community College": "16101 Greenwood Ave N. (Building 1600), Shoreline, WA 98133",  # NOQA
         }
         self.base_url = "https://www.siff.net"
 
@@ -42,10 +47,15 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
                 film_url = f"{self.base_url}{film_anchor['href']}"
 
                 film_times = film.find("div", class_="times")
-                film_theater = (
-                    film_times.find("span", class_="dark-gray-text").get_text().strip()
-                )
-                film_location = f"{self.theater}: {self.addresses[film_theater]}"
+                try:
+                    film_theater = (
+                        film_times.find("span", class_="dark-gray-text")
+                        .get_text()
+                        .strip()
+                    )
+                    film_location = f"{self.theater}: {self.addresses[film_theater]}"
+                except AttributeError:
+                    break
                 for screening in film.find_all("a", class_="elevent"):
                     event_json = json.loads(html.unescape(screening["data-screening"]))
                     film_duration = timedelta(minutes=event_json["LengthInMinutes"])

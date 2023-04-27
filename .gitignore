@@ -5,3 +5,5 @@ Seattle Film Calendar.bbprojectd
 .DS_Store
 *.egg-info
 .venv
+.vscode
+build
