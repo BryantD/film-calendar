@@ -41,10 +41,12 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
                 film_date = self.timezone.localize(
                     datetime.fromisoformat(showing["StartDateTime"])
                 )
-                self.add_event(
-                    summary=film_title,
-                    dtstart=film_date,
-                    duration=film_duration,
-                    url=film_url,
-                    location=film_location,
-                )
+                if film_title != "Private Party Rental":
+                    # Hardcoding a skip for rental slots
+                    self.add_event(
+                        summary=film_title,
+                        dtstart=film_date,
+                        duration=film_duration,
+                        url=film_url,
+                        location=film_location,
+                    )
