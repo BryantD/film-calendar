@@ -36,7 +36,7 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
             film_location = f"{self.theater}: {self.address}"
             try:
                 film_h2 = film.find("h2", class_="film-card--title")
-                film_title = film_h2.get_text()
+                film_title = film_h2.get_text().strip()
                 film_url = film_h2.find("a")["href"]
             except TypeError as error:
                 raise ValueError("Couldn't find film name") from error
