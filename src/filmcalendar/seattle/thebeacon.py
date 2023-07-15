@@ -1,3 +1,4 @@
+import string
 from datetime import datetime, timedelta
 
 import requests
@@ -24,7 +25,9 @@ class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
 
         for film in soup.find_all("section", class_="showtime"):
             try:
-                film_title = film.find("section", itemprop="name").get_text().title()
+                film_title = string.capwords(
+                    film.find("section", itemprop="name").get_text()
+                )
             except TypeError as error:
                 raise ValueError("Couldn't find film name") from error
             if film_title != "Rent The Beacon":
