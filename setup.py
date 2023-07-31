@@ -24,7 +24,7 @@ setup(
         "icalendar ==5.0.7",
         "requests ==2.31.0",
         "tomli ==2.0.1",
-        "xxhash ==3.2.0",
+        "xxhash ==3.3.0",
     ],
     entry_points={
         "console_scripts": [
