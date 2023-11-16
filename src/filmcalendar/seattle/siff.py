@@ -15,6 +15,7 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
             "SIFF Cinema Egyptian": "805 E. Pine St, Seattle, WA 98122",
             "SIFF Film Center": "305 Harrison St, Seattle, WA 98109",
             "SIFF Cinema Uptown": "511 Queen Anne Ave N, Seattle, WA 98109",
+            "SIFF Cinema Downtown": "2100 4th Ave, Seattle, WA 98121",
             # Following locations are for SIFF 2023
             "Paramount Theatre": "911 Pine St, Seattle, WA 98101",
             "AMC Pacific Place": "600 Pine St #400, Seattle, WA 98101",
