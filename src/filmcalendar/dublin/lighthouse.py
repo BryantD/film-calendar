@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-import pytz  # Adding timezone in here quick -- this may need a refactor later
 import requests
 from bs4 import BeautifulSoup
 
@@ -12,7 +11,6 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
         super().__init__(**kwds)
         self.address = "Market St S, Smithfield, Dublin 7, D07 R6YE, Ireland"
         self.base_url = "https://www.lighthousecinema.ie/ajax/films-by-day-home"
-        self.timezone = pytz.timezone("Europe/Dublin")
 
     def __str__(self):
         return super().__str__()
@@ -25,7 +23,7 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
         except requests.exceptions.RequestException:
             raise
 
-        movie_date = datetime.now() + timedelta(days=relative_day)
+        movie_date = datetime.now(self.timezone) + timedelta(days=relative_day)
         movie_date = movie_date.replace(hour=0, minute=0, second=0, microsecond=0)
 
         soup = BeautifulSoup(req.text, "html.parser")
@@ -40,10 +38,9 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
             film_location = f"{self.theater}: {self.address}"
             for showing in film.find("div", class_="times").find_all("a"):
                 movie_hour, movie_minute = showing.get_text().split(":")
-                showing_date = movie_date.replace(
+                film_date = movie_date.replace(
                     hour=int(movie_hour), minute=int(movie_minute)
                 )
-                film_date = self.timezone.localize(showing_date)
                 self.add_event(
                     summary=film_title,
                     dtstart=film_date,
