@@ -1,6 +1,6 @@
 city = "dublin"
 calendar_name = "Dublin Arthouse Movie Calendar"
-timezone = "US/Pacific"
+timezone = "Europe/Dublin"
 site_url = "https://dublin-movies.innocence.com/"
 
 [Theaters]

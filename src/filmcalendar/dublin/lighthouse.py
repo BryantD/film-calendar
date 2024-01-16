@@ -25,8 +25,8 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
         except requests.exceptions.RequestException:
             raise
 
-        movie_date = datetime.now() + timedelta(days=relative_day - 1)
-        movie_date.replace(hour=0, minute=0, second=0)
+        movie_date = datetime.now() + timedelta(days=relative_day)
+        movie_date = movie_date.replace(hour=0, minute=0, second=0, microsecond=0)
 
         soup = BeautifulSoup(req.text, "html.parser")
 
@@ -40,9 +40,10 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
             film_location = f"{self.theater}: {self.address}"
             for showing in film.find("div", class_="times").find_all("a"):
                 movie_hour, movie_minute = showing.get_text().split(":")
-                showing_date = movie_date
-                showing_date.replace(hour=int(movie_hour), minute=int(movie_minute))
-                film_date = self.timezone.localize(movie_date)
+                showing_date = movie_date.replace(
+                    hour=int(movie_hour), minute=int(movie_minute)
+                )
+                film_date = self.timezone.localize(showing_date)
                 self.add_event(
                     summary=film_title,
                     dtstart=film_date,
@@ -52,6 +53,6 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
                 )
 
     def fetch_films(self):
-        for day in range(1, 14):
-            # 14 days is arbitrary but I think two weeks is a good window
+        for day in range(0, 14):
+            # 15 days is arbitrary but I think two weeks is a good window
             self.fetch_film_day(day)
