@@ -35,18 +35,34 @@ class FilmCalendarIFI(filmcalendar.FilmCalendar):
         )
         film_duration = timedelta(minutes=int(film_duration_string))
 
-        current_date = datetime.now()
+        current_date = datetime.now(self.timezone)
 
         for film_date_div in soup.find_all("div", class_="date"):
-            film_date = datetime.strptime(
-                film_date_div.get_text(strip=True), "%A %d %b"
-            )
+            film_date_string = film_date_div.get_text(strip=True)
+
+            # Special case leap years; we simplify the full leap year check because if
+            # the text contains "29 Feb" then it's a leap year
+            if "29 Feb" in film_date_string:
+                if current_date.year % 4 == 0:
+                    # Cool, we're in a leap year, this is fine
+                    film_date = datetime.strptime(
+                        f"{film_date_string} {current_date.year}", "%A %d %b %Y"
+                    )
+                else:
+                    # Cool, not a leap year, so probably a film showing next year
+                    film_date = datetime.strptime(
+                        f"{film_date_string} {current_date.year + 1}", "%A %d %b %Y"
+                    )
+            else:
+                film_date = datetime.strptime(film_date_string, "%A %d %b")
 
             # Check if the month in the date string is earlier than the current month
             if film_date.month < current_date.month:
                 film_date = film_date.replace(year=current_date.year + 1)
             else:
                 film_date = film_date.replace(year=current_date.year)
+
+            film_date = film_date.replace(tzinfo=self.timezone)
 
             film_time_div = film_date_div.next_sibling
 
