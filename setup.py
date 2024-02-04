@@ -20,7 +20,7 @@ setup(
         "beautifulsoup4 ==4.12.2",
         "Click ==8.1.7",
         "feedgenerator ==2.1.0",
-        "pytz ==2023.3.post1",
+        "pytz ==2023.4",
         "icalendar ==5.0.11",
         "requests ==2.31.0",
         "tomli ==2.0.1",
