@@ -18,7 +18,7 @@ class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
     def fetch_film_day(self, relative_day):
         try:
             req = requests.get(
-                f"{self.base_url}/{relative_day}",
+                f"{self.base_url}/{relative_day}", headers=self.req_headers
             )
         except requests.exceptions.RequestException:
             raise
