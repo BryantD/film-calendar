@@ -50,31 +50,32 @@ class FilmCalendarGrandIllusion(filmcalendar.FilmCalendar):
                 film_duration = timedelta(minutes=120)
 
             try:
-                for screening in film.find(
-                    "div", class_="film-card--screenings"
-                ).stripped_strings:
-                    screen_date, screen_times = screening.split(": ")
-                    for screen_time in screen_times.split(", "):
-                        # Bit of a hack to handle a one-off, but it should catch
-                        # future instances of this as well.
-                        if " at " in screen_time:
-                            screen_time = screen_time.split(" at ")[0]
-                            film_location = (
-                                "Check listing for the location of this screening."
-                            )
-                        try:
-                            film_date = datetime.strptime(
-                                f"{screen_date} {screen_time} {datetime.now().year}",
-                                "%A, %b %d %I:%M %p %Y",
-                            )
-                            self.add_event(
-                                summary=film_title,
-                                dtstart=film_date,
-                                duration=film_duration,
-                                url=film_url,
-                                location=film_location,
-                            )
-                        except ValueError as error:
-                            raise ValueError("Couldn't parse date and time") from error
+                for screening in film.find_all("li", class_="screening"):
+                    screen_time = screening.get_text().strip()
+
+                    # Bit of a hack to handle a one-off, but it should catch
+                    # future instances of this as well.
+                    if " at " in screen_time:
+                        screen_time = screen_time.split(" at ")[0]
+                        film_location = (
+                            "Check listing for the location of this screening."
+                        )
+
+                    # Screening time format as of 2/9/2024:
+                    # Sunday, Feb 18, 2024, 7:00pm
+                    try:
+                        film_date = datetime.strptime(
+                            f"{screen_time}",
+                            "%A, %b %d, %Y, %I:%M%p",
+                        )
+                        self.add_event(
+                            summary=film_title,
+                            dtstart=film_date,
+                            duration=film_duration,
+                            url=film_url,
+                            location=film_location,
+                        )
+                    except ValueError as error:
+                        raise ValueError("Couldn't parse date and time") from error
             except AttributeError:
                 next
