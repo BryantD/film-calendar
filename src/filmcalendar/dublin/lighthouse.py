@@ -9,7 +9,7 @@ from filmcalendar import filmcalendar
 class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.address = "Market St S, Smithfield, Dublin 7, D07 R6YE, Ireland"
+        self.address = "Market St S, Smithfield, Dublin 7, D07 R6YE"
         self.base_url = "https://www.lighthousecinema.ie/ajax/films-by-day-home"
 
     def __str__(self):

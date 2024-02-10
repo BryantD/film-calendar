@@ -10,7 +10,7 @@ from filmcalendar import filmcalendar
 class FilmCalendarIFI(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
-        self.address = "6 Eustace Street, Temple Bar, Dublin 2, D02 PD85, Ireland"
+        self.address = "6 Eustace Street, Temple Bar, Dublin 2, D02 PD85"
         self.base_url = "https://shop.ifi.ie/"
 
     def __str__(self):
