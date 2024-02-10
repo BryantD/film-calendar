@@ -6,3 +6,4 @@ site_url = "https://dublin-movies.innocence.com/"
 [Theaters]
 lighthouse = "Lighthouse"
 ifi = "IFI"
+stella = "Stella"
