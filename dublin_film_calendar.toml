@@ -4,6 +4,6 @@ timezone = "Europe/Dublin"
 site_url = "https://dublin-movies.innocence.com/"
 
 [Theaters]
-lighthouse = "Lighthouse"
+lighthouse = "Light House"
 ifi = "IFI"
 stella = "Stella"

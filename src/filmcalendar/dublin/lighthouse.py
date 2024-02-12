@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from filmcalendar import filmcalendar
 
 
-class FilmCalendarLighthouse(filmcalendar.FilmCalendar):
+class FilmCalendarLightHouse(filmcalendar.FilmCalendar):
     def __init__(self, **kwds):
         super().__init__(**kwds)
         self.address = "Market St S, Smithfield, Dublin 7, D07 R6YE"
