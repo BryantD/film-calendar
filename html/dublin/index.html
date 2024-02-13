@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Dublin Arthouse Movie Calendar</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.4.0/ical.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@5.11.3/main.global.min.js"></script>
+    <script>
+        theaterRe = /^([^:])+/;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const calendarIds = [
+                document.getElementById("calendar1"),
+                document.getElementById("calendar2"),
+                document.getElementById("calendar3"),
+            ];
+
+            for (const [i, calendar] of calendarIds.entries()) {
+                var baseDate = new Date();
+                var calDate = new Date();
+                calDate.setDate(baseDate.getDate() + i);
+                var fcalendar = new FullCalendar.Calendar(calendarIds[i], {
+                    height: "auto",
+                    initialView: "listDay",
+                    initialDate: calDate,
+                    events: {
+                        url: "film_calendar.ics",
+                        format: "ics",
+                    },
+                    headerToolbar: false,
+                    listDayFormat: {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                    },
+                    eventDidMount: function (info) {
+                        theater =
+                            info.event.extendedProps.location.match(
+                                theaterRe,
+                            );
+                        info.event.setProp(
+                            "title",
+                            theater[0] + ": " + info.event.title,
+                        );
+                    },
+                    dayHeaderContent: function (arg, createElement) {
+                        return createElement("h4", {}, arg.text);
+                    },
+                });
+                fcalendar.render();
+            }
+        });
+    </script>
+</head>
+
+<body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <!-- Header -->
+                <header id="header">
+                    <h2>Dublin Arthouse Movie Calendar</h2>
+                </header>
+
+                <!-- Calendar -->
+                <section id="calendars">
+                    <div class="row">
+                        <div class="col-4 col-12-medium">
+                            <section class="box article-list" id="calendar1"></section>
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <section class="box article-list" id="calendar2"></section>
+                        </div>
+                        <div class="col-4 col-12-medium">
+                            <section class="box article-list" id="calendar3"></section>
+                        </div>
+                </section>
+
+
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div class="inner">
+                <!-- Menu -->
+                <nav id="menu">
+                    <header class="major">
+                        <h2>Feeds</h2>
+                    </header>
+                    <p>
+                        The calendar feeds are designed for use with Google Calendar (follow <a
+                            href="https://support.google.com/calendar/answer/37100">these
+                            instructions</a>) or Apple Calendar (follow <a
+                            href="https://support.apple.com/guide/calendar/subscribe-to-calendars-icl1022/mac">these
+                            instructions</a> for a Mac,
+                        or <a href="https://support.apple.com/guide/iphone/use-multiple-calendars-iph3d1110d4/ios">these
+                            instructions</a> for an iPhone or iPad).
+                    </p>
+
+                    <p>
+                        The RSS feed will work with any RSS reader.
+                    </p>
+                    <ul>
+                        <li><a href="film_calendar.ics" class="icon fa-calendar"> Combined Calendar Feed</a></li>
+                        <li>
+                            <span class="icon fa-calendar opener"> Per-Theater Calendar Feeds</span>
+                            <ul>
+                                <li><a href="ifi.ics" class="icon fa-calendar"> Irish Film Institute</a></li>
+                                <li><a href="lighthouse.ics" class="icon fa-calendar"> Light House Cinema</a></li>
+                                <li><a href="stella.ics" class="icon fa-calendar"> Stella Cinemas</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="film_calendar.rss" class="icon fa-rss"> RSS Feed</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Section -->
+                <section>
+                    <header class="major">
+                        <h2>Theaters</h2>
+                    </header>
+                    <div class="mini-posts">
+                        <article>
+                            <a href="#" class="image"><img src="images/ifi.jpg" alt="" /></a>
+                            <p>
+                                The Irish Film Institute is Ireland's national cultural institution for film. Located
+                                in Temple Bar, it incorporates a restaurant and a small shop selling books and physical
+                                media.
+                            </p>
+                        </article>
+                        <article>
+                            <a href="#" class="image"><img src="images/light-house.jpg" alt="" /></a>
+                            <p>
+                                Light House Cinema shows current and classic arthouse movies, along with some event
+                                screenings.
+                            </p>
+                        </article>
+                        <article>
+                            <a href="#" class="image"><img src="images/stella-cinema.jpg" alt="Stella Cinema" /></a>
+                            <p>
+                                The Stella Cinemas, located in Rathmines and Ranaelagh, show a mix of new releases and
+                                classic films.
+                            </p>
+                        </article>
+                    </div>
+                </section>
+
+                <!-- Section -->
+                <section>
+                    <header class="major">
+                        <h2>About This Page</h2>
+                    </header>
+                    <p>
+                        I'm horrible at keeping track of movies I want to see. I subscribe to all the local cinema
+                        newsletters but that's not enough for me. Thus, I wrote some code to scrape various cinema web
+                        sites and generate a calendar. It seemed as though this might be useful to other people so now
+                        there's a Web site.
+                    </p>
+                    <p>
+                        The original version of this site was created for <a
+                            href="https://seattle-movies.innocence.com">Seattle</a>.
+                    </p>
+                    <ul class="contact">
+                        <li class="icon solid fa-envelope">
+                            <a href="mailto:durrell@innocence.com">durrell@innocence.com</a>
+                        </li>
+                        <li class="icon brands fa-github">
+                            <a href="https://github.com/BryantD/film-calendar">GitHub Repo</a>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Footer -->
+                <footer id="footer">
+                    <p class="copyright">
+                        &copy; Bryant Durrell. All rights reserved. Design:
+                        <a href="https://html5up.net">HTML5 UP</a>. Photos:
+                    </p>
+                    <ul class="copyright">
+                        <li>IFI: licensed by Piero Fissore under a Creative Commons BY-SA-ND 2.0 license
+                            (<a href="https://www.flickr.com/photos/pierofix/242533033/">original</a>)</li>
+                        <li>Light House: licensed by William Murphy under a Creative Commons BY-SA 2.0 license
+                            (<a href="https://www.flickr.com/photos/infomatique/8693594661">original</a>)</li>
+                        <li>Stella Cinemas: licensed by Ross Mahon/Shutterstock.com</li>
+                    </ul>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
