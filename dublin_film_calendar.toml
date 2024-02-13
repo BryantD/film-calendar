@@ -1,0 +1,9 @@
+city = "dublin"
+calendar_name = "Dublin Arthouse Movie Calendar"
+timezone = "Europe/Dublin"
+site_url = "https://dublin-movies.innocence.com/"
+
+[Theaters]
+lighthouse = "Light House"
+ifi = "IFI"
+stella = "Stella"
