@@ -44,7 +44,7 @@ class FilmCalendarStella(filmcalendar.FilmCalendar):
             base_location = film["taxonomy"][0]
             film_title = film["event_title"]
             film_location = (
-                f"{base_location.capitalize()}: {self.addresses[base_location]}"
+                f"Stella {base_location.capitalize()}: {self.addresses[base_location]}"
             )
             film_url = (
                 self.base_url + "/events/" + base_location + "/" + film["event_slug"]
