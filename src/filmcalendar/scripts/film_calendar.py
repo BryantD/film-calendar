@@ -59,7 +59,7 @@ def cli(config, theater, directory):
 
     config_data = load_config(config.name)
 
-    seattle_films = FilmCalendar(
+    films = FilmCalendar(
         calendar_name=config_data["calendar_name"],
         timezone=config_data["timezone"],
         site_url=config_data["site_url"],
@@ -81,10 +81,10 @@ def cli(config, theater, directory):
         )
         theater_calendar.fetch_films()
         theater_calendar.write(f"{directory}/{t}.ics")
-        seattle_films.append_filmcalendar(theater_calendar)
+        films.append_filmcalendar(theater_calendar)
 
         if len(theater_calendar) == 0:
             print(f"No events found for {config_data['Theaters'][t]}!")
 
-    seattle_films.write(f"{directory}/film_calendar.ics")
-    seattle_films.writerss(f"{directory}/film_calendar.rss")
+    films.write(f"{directory}/film_calendar.ics")
+    films.writerss(f"{directory}/film_calendar.rss")
