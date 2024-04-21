@@ -21,6 +21,8 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
             "AMC Pacific Place": "600 Pine St #400, Seattle, WA 98101",
             "Ark Lodge Cinemas": "4816 Rainier Ave S, Seattle, WA 98118",
             "Shoreline Community College": "16101 Greenwood Ave N. (Building 1600), Shoreline, WA 98133",  # NOQA
+            # New location for SIFF 2024
+            "Majestic Bay": "2044 NW Market St, Seattle, WA 98107",
         }
         self.base_url = "https://www.siff.net"
 
