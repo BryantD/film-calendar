@@ -1,0 +1,11 @@
+city = "sf"
+calendar_name = "San Francisco Arthouse Movie Calendar"
+timezone = "America/Los_Angeles"
+site_url = "https://github.com/BryantD/film-calendar"
+
+[Theaters]
+4star = "4 Star"
+alamo = "Alamo Drafthouse New Mission"
+balboa = "Balboa"
+marina = "Marina"
+vogue = "Vogue"
