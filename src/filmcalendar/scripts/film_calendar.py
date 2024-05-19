@@ -88,3 +88,6 @@ def cli(config, theater, directory):
 
     films.write(f"{directory}/film_calendar.ics")
     films.writerss(f"{directory}/film_calendar.rss")
+
+if __name__ == "__main__":
+    cli()
