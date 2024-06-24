@@ -23,7 +23,7 @@ setup(
         "Click ==8.1.7",
         "feedgenerator ==2.1.0",
         "pytz ==2024.1",
-        "icalendar ==5.0.12",
+        "icalendar ==5.0.13",
         "requests ==2.32.2",
         "tomli ==2.0.1",
         "xxhash ==3.4.1",
