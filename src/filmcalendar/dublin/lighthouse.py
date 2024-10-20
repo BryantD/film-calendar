@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 
 import requests
@@ -16,6 +17,10 @@ class FilmCalendarLightHouse(filmcalendar.FilmCalendar):
         return super().__str__()
 
     def fetch_film_day(self, relative_day):
+        # Added to debug weird Light House issue
+        logging.basicConfig(format="%(message)s")
+        log = logging.getLogger(__name__)
+
         try:
             req = requests.get(
                 f"{self.base_url}/{relative_day}", headers=self.req_headers
@@ -32,6 +37,11 @@ class FilmCalendarLightHouse(filmcalendar.FilmCalendar):
         for film in event_data:
             film_title = film.find("h3").find("a").get_text(strip=True)
             film_url = film.find("h3").find("a")["href"]
+            try:
+                film.find("span", class_="where").get_text()
+            except AttributeError:
+                log.warning(f"Skipping {film_title} because it has no time")
+                log.warning(film.prettify())
             film_duration = timedelta(
                 minutes=int(film.find("span", class_="where").get_text()[:-5])
             )
