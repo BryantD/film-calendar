@@ -8,7 +8,7 @@ Links to live instances where available.
 
 - [Seattle](https://seattle-movies.innocence.com/): run by me
 - [Dublin](https://dublin-movies.innocence.com/): run by me
-- San Francisco: code available, no public instance yet
+- San Francisco: code by davide125, no public instance
 
 # film-calendar Usage
 
