@@ -1,6 +1,14 @@
 # Introduction
 
-This is an aggregator and calendar generator for local movie times. Out of the box it works for Seattle, since that's where I live, but it should be relatively easy to extend it to other cities.
+This is an aggregator and calendar generator for local movie times. I wrote it for Seattle, since that's where I live, but it should be relatively easy to extend it to other cities.
+
+# Supported Cities
+
+Links to live instances where available.
+
+- [Seattle](https://seattle-movies.innocence.com/): run by me
+- [Dublin](https://dublin-movies.innocence.com/): run by me
+- San Francisco: code by davide125, no public instance
 
 # film-calendar Usage
 
