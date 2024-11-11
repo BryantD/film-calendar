@@ -32,10 +32,17 @@ class FilmCalendarNWFF(filmcalendar.FilmCalendar):
         minutes, s = self._get_isosplit(s, "M")
         seconds, s = self._get_isosplit(s, "S")
 
-        # Convert all to seconds
-        dt = timedelta(
-            days=int(days), hours=int(hours), minutes=int(minutes), seconds=int(seconds)
-        )
+        # Convert all to seconds or set 120 minutes as the default
+        try:
+            dt = timedelta(
+                days=int(days),
+                hours=int(hours),
+                minutes=int(minutes),
+                seconds=int(seconds),
+            )
+        except ValueError:
+            dt = timedelta(minutes=120)
+
         return dt
 
     def _fetch_film_page(self, start_date):
