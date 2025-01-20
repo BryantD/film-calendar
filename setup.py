@@ -20,7 +20,7 @@ setup(
     ],
     install_requires=[
         "beautifulsoup4 ==4.12.3",
-        "Click ==8.1.7",
+        "Click ==8.1.8",
         "feedgenerator ==2.1.0",
         "pytz ==2024.2",
         "icalendar ==6.1.1",
