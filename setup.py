@@ -22,7 +22,7 @@ setup(
         "beautifulsoup4 ==4.13.4",
         "Click ==8.1.8",
         "feedgenerator ==2.1.0",
-        "icalendar ==6.2.0",
+        "icalendar ==6.3.1",
         "requests ==2.32.3",
         "tomli ==2.2.1",
         "xxhash ==3.5.0",
