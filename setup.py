@@ -21,7 +21,7 @@ setup(
     install_requires=[
         "beautifulsoup4 ==4.13.4",
         "Click ==8.1.8",
-        "feedgenerator ==2.1.0",
+        "feedgenerator ==2.2.0",
         "icalendar ==6.3.1",
         "requests ==2.32.4",
         "tomli ==2.2.1",
