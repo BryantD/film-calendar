@@ -7,3 +7,5 @@ Seattle Film Calendar.bbprojectd
 .venv
 .vscode
 build
+.python-version
+uv.lock
