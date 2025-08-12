@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="filmcalendar",
-    version="1.2.1",
+    version="1.2.2",
     description="Film calendar aggregator",
     author="Bryant Durrell",
     author_email="durrell@innocence.com",
@@ -19,13 +19,12 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     install_requires=[
-        "beautifulsoup4 ==4.12.3",
-        "Click ==8.1.7",
-        "feedgenerator ==2.1.0",
-        "pytz ==2024.2",
-        "icalendar ==6.0.1",
-        "requests ==2.32.3",
-        "tomli ==2.0.2",
+        "beautifulsoup4 ==4.13.4",
+        "Click ==8.1.8",
+        "feedgenerator ==2.2.0",
+        "icalendar ==6.3.1",
+        "requests ==2.32.4",
+        "tomli ==2.2.1",
         "xxhash ==3.5.0",
     ],
     entry_points={
