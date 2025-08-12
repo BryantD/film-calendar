@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="filmcalendar",
@@ -33,6 +33,11 @@ setup(
             "film-calendar = filmcalendar.scripts.film_calendar:cli",
         ],
     },
+    extras_require={
+        "dev": [
+            "pytest",
+            "pytest-cov",
+            "flake8",
+        ],
+    },
 )
-
-print(find_packages())
