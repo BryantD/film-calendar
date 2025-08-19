@@ -7,7 +7,7 @@ requires-python = ">=3.8"
 dependencies = [
     "beautifulsoup4==4.12.3",
     "click==8.1.8",
-    "feedgenerator==2.1.0",
+    "feedgenerator==2.2.1",
     "icalendar==6.0.1",
     "pytz==2024.2",
     "requests==2.32.5",
