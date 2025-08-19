@@ -5,7 +5,7 @@ description = "Film calendar aggregator"
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
-    "beautifulsoup4==4.12.3",
+    "beautifulsoup4==4.13.4",
     "click==8.1.8",
     "feedgenerator==2.1.0",
     "icalendar==6.0.1",
