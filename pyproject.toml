@@ -12,7 +12,7 @@ dependencies = [
     "pytz==2025.2",
     "requests==2.32.5",
     "tomli==2.2.1",
-    "xxhash==3.5.0",
+    "xxhash==3.6.0",
 ]
 
 [project.scripts]
