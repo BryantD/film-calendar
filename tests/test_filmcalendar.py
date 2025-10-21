@@ -57,7 +57,7 @@ class TestFilmCalendar:
         )
         assert len(film_calendar) == 1
         # Get the event and verify its properties
-        event = next(film_calendar.cal.walk("vevent"))
+        event = list(film_calendar.cal.walk("vevent"))[0]
         assert event["summary"] == "Test Film"
         assert event["dtstart"].dt == start_time
         assert event["duration"].dt == timedelta(minutes=90)
@@ -75,7 +75,7 @@ class TestFilmCalendar:
         )
         assert len(film_calendar) == 1
         # Get the event and verify its properties
-        event = next(film_calendar.cal.walk("vevent"))
+        event = list(film_calendar.cal.walk("vevent"))[0]
         assert event["summary"] == "Test Film"
         assert event["dtstart"].dt == start_time
         assert event["duration"].dt == timedelta(minutes=120)  # Default duration
@@ -96,7 +96,7 @@ class TestFilmCalendar:
         film_calendar.append_filmcalendar(second_calendar)
         # Verify the event was added
         assert len(film_calendar) == 1
-        event = next(film_calendar.cal.walk("vevent"))
+        event = list(film_calendar.cal.walk("vevent"))[0]
         assert event["summary"] == "Second Film"
 
     def test_write(self, film_calendar):

@@ -9,39 +9,43 @@ from filmcalendar.seattle.centralcinema import FilmCalendarCentralCinema
 
 
 @pytest.fixture
-def mock_response():
-    """Create a mock response with sample data from Central Cinema."""
+def mock_calendar_response():
+    """Create a mock calendar page response."""
     mock_resp = mock.Mock()
-    # Sample HTML response with event data structure
+    mock_resp.status_code = 200
     mock_resp.text = """
-    <div id="event-search-list-module" model='{
-        "Events": [
+    <html>
+        <body>
+            <a href="/movie/test-movie">Test Movie</a>
+            <a href="/movie/test-movie-2">Test Movie 2</a>
+            <a href="/other-page">Other Link</a>
+        </body>
+    </html>
+    """
+    return mock_resp
+
+
+@pytest.fixture
+def mock_movie_response():
+    """Create a mock movie page response with JSON-LD and showtimes."""
+    mock_resp = mock.Mock()
+    mock_resp.status_code = 200
+    mock_resp.text = """
+    <html>
+        <head>
+            <script type="application/ld+json">
             {
-                "EventName": "Test Movie",
-                "EventUrl": "CentralCinema/e/test-movie",
-                "LengthInMinutes": 120,
-                "Schedule": [
-                    {
-                        "StartDateTime": "2025-01-01T19:00:00"
-                    },
-                    {
-                        "StartDateTime": "2025-01-02T19:00:00"
-                    }
-                ]
-            },
-            {
-                "EventName": "Private Party Rental",
-                "EventUrl": "CentralCinema/e/rental",
-                "LengthInMinutes": 180,
-                "Schedule": [
-                    {
-                        "StartDateTime": "2025-01-03T19:00:00"
-                    }
-                ]
+                "@type": "Movie",
+                "name": "Test Movie",
+                "duration": "PT2H0M"
             }
-        ]
-    }'>
-    </div>
+            </script>
+        </head>
+        <body>
+            <h2><a href="/checkout/showing/test/1">January 1, 7:00 pm</a></h2>
+            <h2><a href="/checkout/showing/test/2">January 2, 7:00 pm</a></h2>
+        </body>
+    </html>
     """
     return mock_resp
 
@@ -58,12 +62,17 @@ class TestCentralCinema:
         assert calendar.theater == "Central Cinema"
         assert calendar.timezone_string == "US/Pacific"
         assert calendar.address == "1411 21st Ave., Seattle, WA 98122"
-        assert calendar.base_url == "https://www.goelevent.com"
+        assert calendar.base_url == "https://www.central-cinema.com"
+        assert calendar.calendar_url == "https://www.central-cinema.com/calendar"
 
     @mock.patch("requests.get")
-    def test_fetch_films(self, mock_get, mock_response):
-        # Setup
-        mock_get.return_value = mock_response
+    def test_fetch_films(self, mock_get, mock_calendar_response, mock_movie_response):
+        # Setup - mock returns calendar page first, then movie pages
+        mock_get.side_effect = [
+            mock_calendar_response,  # First call gets calendar
+            mock_movie_response,  # Second call gets first movie
+            mock_movie_response,  # Third call gets second movie
+        ]
         calendar = FilmCalendarCentralCinema(
             calendar_name="Test Calendar",
             theater_name="Central Cinema",
@@ -72,28 +81,28 @@ class TestCentralCinema:
         # Execute
         calendar.fetch_films()
         # Assert
-        # Only 2 events for "Test Movie", skips "Private Party Rental"
-        assert len(calendar) == 2
-        # Check that request was made with the correct URL and headers
-        mock_get.assert_called_once()
-        args, kwargs = mock_get.call_args
-        assert args[0] == "https://www.goelevent.com/CentralCinema/e/List"
-        assert "headers" in kwargs
+        # Should have 4 events total (2 movies × 2 showtimes each)
+        assert len(calendar) == 4
+        # Check that requests were made
+        assert mock_get.call_count == 3
         # Get the events and verify their properties
         events = list(calendar.cal.walk("vevent"))
         # Check all events are for "Test Movie"
         for event in events:
             assert event["summary"] == "Test Movie"
-            url = "https://www.goelevent.com/CentralCinema/e/test-movie"
-            assert event["url"] == url
-            assert event["duration"].dt == timedelta(minutes=120)
+            assert "/movie/test-movie" in str(event["url"])
+            assert event["duration"].dt == timedelta(hours=2)
             location = "Central Cinema: 1411 21st Ave., Seattle, WA 98122"
             assert event["location"] == location
-        # Check the dates of the events
+        # Check the dates of the events (2 movies, each with same 2 showtimes)
         tz = pytz.timezone("US/Pacific")
         expected_dates = [
-            tz.localize(datetime(2025, 1, 1, 19, 0)),
-            tz.localize(datetime(2025, 1, 2, 19, 0)),
+            tz.localize(
+                datetime(2026, 1, 1, 19, 0)
+            ),  # Year 2026 because Jan is before current Oct
+            tz.localize(datetime(2026, 1, 2, 19, 0)),
+            tz.localize(datetime(2026, 1, 1, 19, 0)),
+            tz.localize(datetime(2026, 1, 2, 19, 0)),
         ]
         actual_dates = [event["dtstart"].dt for event in events]
         assert sorted(actual_dates) == sorted(expected_dates)
