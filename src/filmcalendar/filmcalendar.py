@@ -14,7 +14,6 @@ class FilmCalendar:
         timezone="US/Pacific",
         site_url="https://github.com/BryantD/film-calendar",
     ):
-
         self.timezone_string = timezone
         try:
             self.timezone = pytz.timezone(self.timezone_string)

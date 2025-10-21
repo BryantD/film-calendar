@@ -7,5 +7,5 @@ class FilmCalendar4Star(CinemaSF):
             "2200 Clement Street, San Francisco, CA 94121",
             "https://www.4-star-movies.com",
             "616e05fa520d8e7b1cd0ae3d",
-            **kwds
+            **kwds,
         )
