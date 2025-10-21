@@ -1,7 +1,7 @@
-import pytest
-from unittest import mock
 from datetime import datetime, timedelta
+from unittest import mock
 
+import pytest
 import pytz
 import requests
 
@@ -13,7 +13,7 @@ def mock_response():
     """Create a mock response with sample data from Central Cinema."""
     mock_resp = mock.Mock()
     # Sample HTML response with event data structure
-    mock_resp.text = '''
+    mock_resp.text = """
     <div id="event-search-list-module" model='{
         "Events": [
             {
@@ -42,7 +42,7 @@ def mock_response():
         ]
     }'>
     </div>
-    '''
+    """
     return mock_resp
 
 
@@ -60,7 +60,7 @@ class TestCentralCinema:
         assert calendar.address == "1411 21st Ave., Seattle, WA 98122"
         assert calendar.base_url == "https://www.goelevent.com"
 
-    @mock.patch('requests.get')
+    @mock.patch("requests.get")
     def test_fetch_films(self, mock_get, mock_response):
         # Setup
         mock_get.return_value = mock_response
@@ -98,7 +98,7 @@ class TestCentralCinema:
         actual_dates = [event["dtstart"].dt for event in events]
         assert sorted(actual_dates) == sorted(expected_dates)
 
-    @mock.patch('requests.get')
+    @mock.patch("requests.get")
     def test_fetch_films_request_exception(self, mock_get):
         # Setup mock to raise exception
         mock_get.side_effect = requests.exceptions.RequestException("Test error")

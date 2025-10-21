@@ -17,3 +17,21 @@ dependencies = [
 
 [project.scripts]
 film-calendar = "filmcalendar.scripts.film_calendar:cli"
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+]
+ignore = [
+    "E203",  # whitespace before ':' (conflicts with black/ruff-format)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["filmcalendar"]

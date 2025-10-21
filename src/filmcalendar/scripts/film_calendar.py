@@ -34,7 +34,7 @@ def check_theaters_click(ctx, param, value):
     default="film_calendar.toml",
     callback=load_config_click,
     is_eager=True,
-    type=click.File(mode="rb")
+    type=click.File(mode="rb"),
     # Little bit hacky here -- we're using click.File() to validate input, but
     # we extract the file name before opening it. Why? Because Click tosses away
     # the context so you can't read a click.File file more than once.
@@ -88,6 +88,7 @@ def cli(config, theater, directory):
 
     films.write(f"{directory}/film_calendar.ics")
     films.writerss(f"{directory}/film_calendar.rss")
+
 
 if __name__ == "__main__":
     cli()

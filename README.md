@@ -57,7 +57,7 @@ siff = "SIFF"
 
 `city` is the name of the city you're making calendars for. This is only used for finding the right module -- see below for more details on this. It should be lower case; you can use underscores if you feel the need but I wouldn't.
 
-`calendar_name` will be used in the calendar and RSS files. 
+`calendar_name` will be used in the calendar and RSS files.
 
 `timezone` must be a timezone as understood by [pytz](https://pytz.sourceforge.net/#helpers).
 
@@ -69,7 +69,7 @@ siff = "SIFF"
 - `Full Name` will be used in the location/description fields for the calendar
 - `FullName` will be the name of the theater's class (spaces are removed)
 
-This is a bit contrived but it works for me as a naming scheme. 
+This is a bit contrived but it works for me as a naming scheme.
 
 # Extending the Code
 
@@ -81,15 +81,15 @@ Second, check out `src/filmcalendar/seattle/centralcinema.py` as a model for you
 
 ### Imports
 
-You may or may not need to import `html` or `json`, depending on what kind of parsing you need to do. Personally I leave those imports in everywhere because there's a good chance I'll be parsing json data and unescaping random strings. 
+You may or may not need to import `html` or `json`, depending on what kind of parsing you need to do. Personally I leave those imports in everywhere because there's a good chance I'll be parsing json data and unescaping random strings.
 
-`BeautifulSoup` and `requests` are musts for me, but if you have a different preference for retrieving and parsing Web pages, go for it. Or if you're reading your data from something other than a Web page or even a REST API, you probably won't need the same libraries I did. 
+`BeautifulSoup` and `requests` are musts for me, but if you have a different preference for retrieving and parsing Web pages, go for it. Or if you're reading your data from something other than a Web page or even a REST API, you probably won't need the same libraries I did.
 
 `datetime` is necessary, because you're going to call `self.add_event` with parameters that have to be datetime objects.
 
-### Class 
+### Class
 
-The `__init__` and `__str__` functions are pretty cut and dried. I set the various constants in `__init__` since it means they're in a consistent place across all the classes I wrote for this. 
+The `__init__` and `__str__` functions are pretty cut and dried. I set the various constants in `__init__` since it means they're in a consistent place across all the classes I wrote for this.
 
 `fetch_films` does the hard work. For each showing of a film your scraper finds, call `self.add_event` (inherited from the parent class) with the parameters `summary`, `dtstart`, `duration`, `url`, and `location`. Easy as pie.
 

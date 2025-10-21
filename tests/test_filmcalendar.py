@@ -143,7 +143,7 @@ class TestFilmCalendar:
             assert os.path.exists(filename)
             with open(filename, "r") as f:
                 content = f.read()
-                assert "<?xml version=\"1.0\" encoding=\"utf-8\"?>" in content
+                assert '<?xml version="1.0" encoding="utf-8"?>' in content
                 assert "<rss " in content
                 assert "Test Film" in content
                 assert "Test Theater" in content

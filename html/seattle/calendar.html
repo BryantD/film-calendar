@@ -15,14 +15,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@5.11.3/main.global.min.js"></script>
     <script>
         theaterRe = /^([^:])+/;
-                
+
         document.addEventListener('DOMContentLoaded', function() {
             const calendarIds = [
                 document.getElementById('calendar1'),
                 document.getElementById('calendar2'),
                 document.getElementById('calendar3')
             ];
-            
+
             for (const [i, calendar] of calendarIds.entries()) {
                 var baseDate = new Date();
                 var calDate = new Date();
@@ -52,7 +52,7 @@
                 fcalendar.render();
             };
         });
-        
+
     </script>
     <title>Seattle Arthouse Movie Calendar</title>
 </head>
@@ -140,11 +140,11 @@
     </div>
 
     </div><!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script> 
-    <script src="assets/js/jquery.dropotron.min.js"></script> 
-    <script src="assets/js/browser.min.js"></script> 
-    <script src="assets/js/breakpoints.min.js"></script> 
-    <script src="assets/js/util.js"></script> 
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.dropotron.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
