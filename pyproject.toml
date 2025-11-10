@@ -8,7 +8,7 @@ dependencies = [
     "beautifulsoup4==4.14.2",
     "click==8.1.8",
     "feedgenerator==2.2.1",
-    "icalendar==6.3.1",
+    "icalendar==6.3.2",
     "pytz==2025.2",
     "requests==2.32.5",
     "tomli==2.3.0",
