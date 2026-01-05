@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "beautifulsoup4==4.14.3",
-    "click==8.1.8",
+    "click==8.3.1",
     "feedgenerator==2.2.1",
     "icalendar==6.3.2",
     "pytz==2025.2",
