@@ -10,3 +10,6 @@ build
 .python-version
 uv.lock
 CLAUDE.md
+.beads
+AGENTs.md
+.gitattributes
