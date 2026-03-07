@@ -35,12 +35,12 @@ class FilmCalendar:
         self.cal.add("x-wr-calname", calendar_name)
         self.cal.add("x-wr-timezone", self.timezone_string)
 
-    def __str__(self):
-        cal_string = self.cal.to_ical()
-        return cal_string.decode("utf-8")
+    # def __str__(self):
+    #     cal_string = self.cal.to_ical()
+    #     return cal_string.decode("utf-8")
 
-    def __len__(self):
-        return len(self.cal.walk(name="vevent"))
+    # def __len__(self):
+    #     return len(self.cal.walk(name="vevent"))
 
     def append_filmcalendar(self, calendar):
         for event in calendar.cal.walk(name="vevent"):
@@ -87,8 +87,8 @@ class FilmCalendar:
         )
 
         for event in self.cal.walk(name="vevent"):
-            theater_name = event.decoded("location").decode("utf-8").split(":")[0]
-            event_name = event.decoded("summary").decode("utf-8")
+            theater_name = event.decoded("location").split(":")[0]
+            event_name = event.decoded("summary")
             event_time = vDatetime.from_ical(event["dtstart"].to_ical()).strftime(
                 "%b %d, %I:%M %p"
             )

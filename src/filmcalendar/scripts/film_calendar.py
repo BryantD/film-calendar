@@ -80,11 +80,11 @@ def cli(config, theater, directory):
             site_url=config_data["site_url"],
         )
         theater_calendar.fetch_films()
-        theater_calendar.write(f"{directory}/{t}.ics")
-        films.append_filmcalendar(theater_calendar)
-
-        if len(theater_calendar) == 0:
+        if not theater_calendar:
             print(f"No events found for {config_data['Theaters'][t]}!")
+        else:
+            theater_calendar.write(f"{directory}/{t}.ics")
+            films.append_filmcalendar(theater_calendar)
 
     films.write(f"{directory}/film_calendar.ics")
     films.writerss(f"{directory}/film_calendar.rss")
