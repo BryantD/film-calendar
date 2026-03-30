@@ -10,7 +10,7 @@ dependencies = [
     "feedgenerator==2.2.1",
     "icalendar==7.0.2",
     "pytz==2025.2",
-    "requests==2.33.0",
+    "requests==2.33.1",
     "tomli==2.4.0",
     "xxhash==3.6.0",
 ]
