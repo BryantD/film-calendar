@@ -1,6 +1,6 @@
 [project]
 name = "seattle-film-calendar"
-version = "1.2.6"
+version = "1.2.7"
 description = "Film calendar aggregator"
 readme = "README.md"
 requires-python = ">=3.12"

@@ -23,6 +23,8 @@ class FilmCalendarSIFF(filmcalendar.FilmCalendar):
             "Shoreline Community College": "16101 Greenwood Ave N. (Building 1600), Shoreline, WA 98133",  # NOQA
             # New location for SIFF 2024
             "Majestic Bay": "2044 NW Market St, Seattle, WA 98107",
+            # New location for SIFF 2026
+            "PACCAR IMAX Theater at Pacific Science Center": "200 Sur Bird Ct. N, Seattle, WA 98109",
         }
         self.base_url = "https://www.siff.net"
 
