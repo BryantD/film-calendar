@@ -96,9 +96,7 @@ class FilmCalendar:
         for event in self.cal.walk(name="vevent"):
             theater_name = event.decoded("location").split(":")[0]
             event_name = event.decoded("summary")
-            event_time = vDatetime.from_ical(event["dtstart"].to_ical()).strftime(
-                "%b %d, %I:%M %p"
-            )
+            event_time = event["dtstart"].dt.strftime("%b %d, %I:%M %p")
             event_description = f"{theater_name}: {event_name} ({event_time})"
             feed.add_item(
                 title=event_description,

@@ -45,7 +45,7 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
         }
         """
         self.query = gql(self.gql_query_string)
-        self.gql_url = "https://filmcenter.tasveer.org/"
+        self.gql_url = "https://filmcenter.tasveer.org/graphql"
         self.headers = {
             "User-Agent": self.req_headers.get(
                 "user-agent",
@@ -85,56 +85,6 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
         minutes = int(match.group(2) or 0)
         return timedelta(hours=hours, minutes=minutes)
 
-    def parse_showtime_text(self, text):
-        """Parse showtime text like 'October 21, 9:30 pm' to datetime."""
-        # Handle formats like "October 21, 9:30 pm" or "November 1, 4:00 pm"
-        match = re.match(r"(\w+)\s+(\d+),\s+(\d+):(\d+)\s+(am|pm)", text.strip())
-        if not match:
-            return None
-
-        month_name, day, hour, minute, meridiem = match.groups()
-        hour = int(hour)
-        minute = int(minute)
-        day = int(day)
-
-        # Convert to 24-hour format
-        if meridiem.lower() == "pm" and hour != 12:
-            hour += 12
-        elif meridiem.lower() == "am" and hour == 12:
-            hour = 0
-
-        # Parse month name to number
-        month_map = {
-            "january": 1,
-            "february": 2,
-            "march": 3,
-            "april": 4,
-            "may": 5,
-            "june": 6,
-            "july": 7,
-            "august": 8,
-            "september": 9,
-            "october": 10,
-            "november": 11,
-            "december": 12,
-        }
-        month = month_map.get(month_name.lower())
-        if not month:
-            return None
-
-        # Determine year (assume current year, or next year if month has passed)
-        now = datetime.now()
-        year = now.year
-        # If the month is before current month, assume next year
-        if month < now.month:
-            year += 1
-
-        try:
-            dt = datetime(year, month, day, hour, minute)
-            return self.timezone.localize(dt)
-        except ValueError:
-            return None
-
     def fetch_films(self):
         """Fetch films from Tasveer -- one day at a time but no need to get
         movie details pages"""
@@ -142,16 +92,16 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
         # Decision: we'll loop 4 weeks into the future; that looks like about how far
         # out Tasveer's scheduling usually goes
         start_date = datetime.now(tz=self.timezone)
-        end_date = start_date + timedelta(weeks=4)
+        end_date = start_date + timedelta(days=1)
 
         while start_date <= end_date:
-            self._fetch_day_data(start_date)
-            start_date = start_date + timedelta(days=1)
+            self._fetch_day_data(start_date.isoformat())
+            start_date = start_date + timedelta(weeks=4)
         return True
 
-    def fetch_day_data(self, schedule_date):
+    def _fetch_day_data(self, schedule_date):
         try:
-            logger.info(f"Fetching calendar page: {self.calendar_url}")
+            logger.info(f"Fetching GraphQL data: {self.gql_url} ({schedule_date})")
             result = self.client.execute(
                 self.query, variable_values={"date": schedule_date, "siteIds": [262]}
             )
@@ -167,8 +117,15 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
             # Tasveer returns movie titles like
             # "Disclosure Day (2026, English, USA)"
 
-            film_title = showing["movie"]["name"]
-            film_date = datetime.fromtimestamp(showing["time"])
+            if title_match := re.match(
+                r"^(.*)(\(\d\d\d\d.+\)*)$", showing["movie"]["name"]
+            ):
+                film_title = title_match.group(1)
+            else:
+                film_title = showing["movie"]["name"]
+            film_date = datetime.fromisoformat(showing["time"]).astimezone(
+                self.timezone
+            )
             film_duration = timedelta(minutes=showing["movie"]["duration"])
             film_url = (
                 f"https://filmcenter.tasveer.org/movie/{showing['movie']['urlSlug']}"
@@ -181,8 +138,3 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
                 url=film_url,
                 location=self.address,
             )
-
-            print(film_title)
-            print(film_date)
-            print(film_duration)
-            print(film_url)
