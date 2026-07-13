@@ -92,11 +92,11 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
         # Decision: we'll loop 4 weeks into the future; that looks like about how far
         # out Tasveer's scheduling usually goes
         start_date = datetime.now(tz=self.timezone)
-        end_date = start_date + timedelta(days=1)
+        end_date = start_date + timedelta(weeks=4)
 
         while start_date <= end_date:
             self._fetch_day_data(start_date.isoformat())
-            start_date = start_date + timedelta(weeks=4)
+            start_date = start_date + timedelta(days=1)
         return True
 
     def _fetch_day_data(self, schedule_date):
@@ -136,5 +136,5 @@ class FilmCalendarTasveer(filmcalendar.FilmCalendar):
                 dtstart=film_date,
                 duration=film_duration,
                 url=film_url,
-                location=self.address,
+                location=f"{self.theater}: {self.address}",
             )
