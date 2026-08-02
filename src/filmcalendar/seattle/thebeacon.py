@@ -23,46 +23,56 @@ class FilmCalendarTheBeacon(filmcalendar.FilmCalendar):
 
         soup = BeautifulSoup(req.text, "html.parser")
 
-        for film in soup.find_all("section", class_="showtime"):
-            try:
-                film_title = string.capwords(
-                    film.find("section", itemprop="name").get_text()
-                )
-            except TypeError as error:
-                raise ValueError("Couldn't find film name") from error
-            if film_title != "Rent The Beacon":
-                # Hardcoding a skip for rental slots
+        for day in soup.find_all("p", class_="cal-list-date"):
+            print(day.getText())
+            for film in day.parent.find_all("div", class_="cal-list-entry"):
+                print(film.prettify())
                 try:
-                    film_date = self.timezone.localize(
-                        datetime.fromisoformat(
-                            film.find("section", itemprop="startDate")["content"]
-                        )
+                    film_title = string.capwords(
+                        film.find("a", class_="cal-list-movie").get_text()
                     )
+                    print(film_title)
                 except TypeError as error:
-                    raise ValueError("Couldn't find film start time") from error
-                try:
-                    film_url = film.find("a")["href"]
-                except TypeError:
-                    film_url = None
-                try:
-                    film_street = film.find("span", itemprop="streetAddress").get_text()
-                    film_city = film.find("span", itemprop="addressLocality").get_text()
-                    film_state = film.find("span", itemprop="addressRegion").get_text()
-                    film_zip = film.find("span", itemprop="postalCode").get_text()
-                    film_location = (
-                        f"{self.theater}: "
-                        f"{film_street}, "
-                        f"{film_city}, {film_state} {film_zip}"
+                    raise ValueError("Couldn't find film name") from error
+                if film_title != "Rent The Beacon":
+                    # Hardcoding a skip for rental slots
+                    try:
+                        film_date = self.timezone.localize(
+                            datetime.fromisoformat(
+                                film.find("section", itemprop="startDate")["content"]
+                            )
+                        )
+                    except TypeError as error:
+                        raise ValueError("Couldn't find film start time") from error
+                    try:
+                        film_url = film.find("a")["href"]
+                    except TypeError:
+                        film_url = None
+                    try:
+                        film_street = film.find(
+                            "span", itemprop="streetAddress"
+                        ).get_text()
+                        film_city = film.find(
+                            "span", itemprop="addressLocality"
+                        ).get_text()
+                        film_state = film.find(
+                            "span", itemprop="addressRegion"
+                        ).get_text()
+                        film_zip = film.find("span", itemprop="postalCode").get_text()
+                        film_location = (
+                            f"{self.theater}: "
+                            f"{film_street}, "
+                            f"{film_city}, {film_state} {film_zip}"
+                        )
+
+                    except TypeError:
+                        film_location = self.theater
+                    film_duration = timedelta(minutes=120)
+
+                    self.add_event(
+                        summary=film_title,
+                        dtstart=film_date,
+                        duration=film_duration,
+                        url=film_url,
+                        location=film_location,
                     )
-
-                except TypeError:
-                    film_location = self.theater
-                film_duration = timedelta(minutes=120)
-
-                self.add_event(
-                    summary=film_title,
-                    dtstart=film_date,
-                    duration=film_duration,
-                    url=film_url,
-                    location=film_location,
-                )
