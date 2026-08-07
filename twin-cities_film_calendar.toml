@@ -5,4 +5,4 @@ site_url = "https://twin-cities-movies.innocence.com/"
 
 [Theaters]
 trylon = "Trylon Cinema"
-main = "The Main Cinema"
+themain = "The Main Cinema"
