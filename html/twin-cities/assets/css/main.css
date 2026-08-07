@@ -2010,6 +2010,7 @@ input, select, textarea {
 	}
 
 		.icon:before {
+			content: var(--fa);
 			-moz-osx-font-smoothing: grayscale;
 			-webkit-font-smoothing: antialiased;
 			display: inline-block;

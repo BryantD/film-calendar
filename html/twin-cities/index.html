@@ -68,19 +68,18 @@
 
         <!-- Header -->
         <header id="header">
-            <h1><a href="index.html" class="icon solid fa-tint">Twin Cities Arthouse Movie Calendar</a></h1>
+            <h1><a href="index.html" class="icon solid fa-film">Twin Cities Arthouse Movie Calendar</a></h1>
             <nav id="nav">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
                     <li>
                         <a href="#" class="icon solid fa-angle-down">Calendar Feeds</a>
                         <ul>
+                            <li><a href="film_calendar.ics">All Theaters</a></li>
                             <li><a href="trylon.ics">Trylon Cinema</a></li>
                             <li><a href="main.ics">The Main Cinema</a></li>
                         </ul>
                     </li>
-                    <li><a href="">RSS Feed</a></li>
-                    <li><a href="elements.html">About</a></li>
+                    <li><a href="film_calendar.rss">RSS Feed</a></li>
                 </ul>
             </nav>
         </header>
@@ -98,28 +97,69 @@
                         <!-- Sidebar -->
                         <section id="sidebar">
                             <section>
-                                <h3>Magna Feugiat</h3>
-                                <p>Sed tristique purus vitae volutpat commodo suscipit amet sed nibh. Proin a
-                                    ullamcorper sed blandit. Sed tristique purus vitae volutpat commodo suscipit
-                                    ullamcorper commodo suscipit amet sed nibh. Proin a ullamcorper sed blandit..</p>
-                                <footer>
+                                <h3>Using This Site</h3>
+                                <p>Upcoming movies for the theaters we track are shown to the right. If you'd
+                                    like a calendar feed to follow in Google Calendar or Apple Calendar, you
+                                    can copy the URL from the pulldown menu "Calendar Feeds". We provide both
+                                    one consolidated feed and per-theater feeds. If you prefer an
+                                    RSS feed, use the "RSS Feed" link.</p>
+                                <!--<footer>
                                     <ul class="actions">
                                         <li><a href="#" class="button small alt">Learn More</a></li>
                                     </ul>
-                                </footer>
+                                </footer>-->
                             </section>
                             <hr />
                             <section>
-                                <a href="#" class="image fit"><img src="images/pic06.jpg" alt="" /></a>
-                                <h3>Amet Lorem Tempus</h3>
-                                <p>Sed tristique purus vitae volutpat commodo suscipit amet sed nibh. Proin a
-                                    ullamcorper sed blandit. Sed tristique purus vitae volutpat commodo suscipit
-                                    ullamcorper sed blandit lorem ipsum dolore.</p>
-                                <footer>
-                                    <ul class="actions">
-                                        <li><a href="#" class="button small alt">Learn More</a></li>
-                                    </ul>
-                                </footer>
+                                <h3>Theaters</h3>
+
+                                <h4><a href="https://www.trylon.org/">Trylon Cinema</a></h4>
+                                <a href="https://www.trylon.org/" class="image fit"><img src="images/pic06.jpg"
+                                        alt="" /></a>
+                                <p>Trylon Cinema is a microcinema whose mission
+                                    is to cultivate community by screening classic,
+                                    contemporary, independent, and foreign films at
+                                    Trylon Cinema in South Minneapolis and other
+                                    venues throughout the Twin Cities.</p>
+
+                                <h4><a href="https://mspfilm.org/">The Main Cinema</a></h4>
+                                <a href="https://mspfilm.org/" class="image fit"><img src="images/pic06.jpg"
+                                        alt="" /></a>
+                                <p>The MSP Film Society brings the best
+                                    international and independent films to Minnesota
+                                    audiences via, among other things, daily
+                                    programming 365 days a year on all five screens
+                                    at The Main Cinema.</p>
+
+                                <h4>Coming Soon</h4>
+
+                                <p>I plan to add the Riverview Theater, the
+                                    Heights Theater, and Landmark Lagoon as I find
+                                    time and get settled into the Twin Cities.
+                                    Please be patient! The Alamo Drafthouse is not
+                                    currently on the list because it seems to have
+                                    drifted more mainstream since I lived in Austin.
+                                    Emails explaining why I'm wrong about including
+                                    or not including any particular theater are
+                                    welcome.</p>
+
+                            </section>
+                            <hr />
+                            <section>
+                                <h3>About This Site</h3>
+
+                                <p>I'm horrible at keeping track of movies I want to see. I subscribe to all the local
+                                    cinema newsletters but that's not enough for me. Thus, I wrote some code to scrape
+                                    various cinema web sites and generate a calendar. It seemed as though this might be
+                                    useful to other people so now there's a Web site.</p>
+
+                                <p>The original version of this site was created for <a
+                                        href="https://seattle-movies.innocence.com/">Seattle</a> and there's also a
+                                    version for <a href="https://dublin-movies.innocence.com">Dublin</a>.
+                                </p>
+
+                                <p>Comments and requests are welcome using the contact methods in the footer, right
+                                    down there.</p>
                             </section>
                         </section>
 
@@ -150,14 +190,18 @@
         <!-- Footer -->
         <footer id="footer">
             <ul class="icons">
-                <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-                <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-                <li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-                <li><a href="#" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
-                <li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+                <li><a href="https://github.com/BryantD/film-calendar" class="icon brands fa-github"><span
+                            class="label">Github</span></a></li>
+                <li><a href="mailto:durrell@innocence.com" class="icon solid fa-envelope"><span
+                            class="label">Email</span></a></li>
+                <li><a href="https://letterboxd.com/thanlis/" class="icon brands fa-letterboxd"><span
+                            class="label">Letterboxd</span></a></li>
+                <li><a href="https://bsky.app/profile/innocence.com" class="icon brands fa-bluesky"><span
+                            class="label">Bluesky</span></a></li>
+
             </ul>
             <div class="copyright">
-                &copy; Untitled. All rights reserved.
+                &copy; 2026 Bryant Durrell. All rights reserved.
             </div>
         </footer>
 
