@@ -21,69 +21,6 @@ class FilmCalendarTrylonCinema(filmcalendar.FilmCalendar):
     def __str__(self):
         return super().__str__()
 
-    def parse_iso_duration(self, duration_str):
-        """Parse ISO 8601 duration format (e.g., PT1H45M) to timedelta."""
-        if not duration_str:
-            return timedelta(minutes=120)  # Default duration
-
-        match = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?", duration_str)
-        if not match:
-            return timedelta(minutes=120)
-
-        hours = int(match.group(1) or 0)
-        minutes = int(match.group(2) or 0)
-        return timedelta(hours=hours, minutes=minutes)
-
-    def parse_showtime_text(self, text):
-        """Parse showtime text like 'October 21, 9:30 pm' to datetime."""
-        # Handle formats like "October 21, 9:30 pm" or "November 1, 4:00 pm"
-        match = re.match(r"(\w+)\s+(\d+),\s+(\d+):(\d+)\s+(am|pm)", text.strip())
-        if not match:
-            return None
-
-        month_name, day, hour, minute, meridiem = match.groups()
-        hour = int(hour)
-        minute = int(minute)
-        day = int(day)
-
-        # Convert to 24-hour format
-        if meridiem.lower() == "pm" and hour != 12:
-            hour += 12
-        elif meridiem.lower() == "am" and hour == 12:
-            hour = 0
-
-        # Parse month name to number
-        month_map = {
-            "january": 1,
-            "february": 2,
-            "march": 3,
-            "april": 4,
-            "may": 5,
-            "june": 6,
-            "july": 7,
-            "august": 8,
-            "september": 9,
-            "october": 10,
-            "november": 11,
-            "december": 12,
-        }
-        month = month_map.get(month_name.lower())
-        if not month:
-            return None
-
-        # Determine year (assume current year, or next year if month has passed)
-        now = datetime.now()
-        year = now.year
-        # If the month is before current month, assume next year
-        if month < now.month:
-            year += 1
-
-        try:
-            dt = datetime(year, month, day, hour, minute)
-            return self.timezone.localize(dt)
-        except ValueError:
-            return None
-
     def _scrape_and_save_film_page(self, film_url, headers):
         duration_minutes_re = re.compile(r"(\d+)m")
         duration_re = re.compile(
