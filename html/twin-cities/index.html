@@ -86,13 +86,15 @@
 
         <!-- Main-->
         <div class="wrapper style2">
-            <section id="main" class="container">
+            <!-- .container is hard-coded 1200px in main.css with no wider
+                 variant; override inline rather than editing the compiled CSS. -->
+            <section id="main" class="container" style="width: 95%; max-width: 1500px;">
                 <!--<header class="major">
 							<h2>Left Sidebar</h2>
 							<p>Faucibus neque adipiscing mi lorem semper blandit</p>
 						</header>-->
-                <div class="row gtr-150">
-                    <div class="col-4 col-12-narrow">
+                <div class="row gtr-50">
+                    <div class="col-3 col-12-narrow">
 
                         <!-- Sidebar -->
                         <section id="sidebar">
@@ -166,21 +168,22 @@
                         </section>
 
                     </div>
-                    <div class="col-8 col-12-narrow imp-narrow">
+                    <div class="col-9 col-12-narrow imp-narrow">
 
                         <!-- Content -->
                         <section id="content">
                             <section id="calendars">
-                                <div class="row">
-                                    <div class="col-4 col-12-medium">
-                                        <section class="box article-list" id="calendar1"></section>
+                                <div class="row gtr-50">
+                                    <div class="col-4 col-12-narrow">
+                                        <section class="box alt article-list" id="calendar1"></section>
                                     </div>
-                                    <div class="col-4 col-12-medium">
-                                        <section class="box article-list" id="calendar2"></section>
+                                    <div class="col-4 col-12-narrow">
+                                        <section class="box alt article-list" id="calendar2"></section>
                                     </div>
-                                    <div class="col-4 col-12-medium">
-                                        <section class="box article-list" id="calendar3"></section>
+                                    <div class="col-4 col-12-narrow">
+                                        <section class="box alt article-list" id="calendar3"></section>
                                     </div>
+                                </div>
                             </section>
                         </section>
 
