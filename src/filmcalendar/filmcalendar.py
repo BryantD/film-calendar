@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from importlib.metadata import PackageNotFoundError, version
 
 import feedgenerator
 import pytz
@@ -34,6 +35,12 @@ class FilmCalendar:
         self.cal.add("prodid", f"-//{calendar_name}//NONSGML Event Calendar//EN")
         self.cal.add("x-wr-calname", calendar_name)
         self.cal.add("x-wr-timezone", self.timezone_string)
+
+        # Version:
+        try:
+            self.__version__ = version("film-calendar")
+        except PackageNotFoundError:  # running from source, not installed
+            self.__version__ = "0.0.0+unknown"
 
     # def __str__(self):
     #     cal_string = self.cal.to_ical()
@@ -89,9 +96,7 @@ class FilmCalendar:
         for event in self.cal.walk(name="vevent"):
             theater_name = event.decoded("location").split(":")[0]
             event_name = event.decoded("summary")
-            event_time = vDatetime.from_ical(event["dtstart"].to_ical()).strftime(
-                "%b %d, %I:%M %p"
-            )
+            event_time = event["dtstart"].dt.strftime("%b %d, %I:%M %p")
             event_description = f"{theater_name}: {event_name} ({event_time})"
             feed.add_item(
                 title=event_description,
