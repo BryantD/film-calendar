@@ -1,0 +1,8 @@
+city = "twin-cities"
+calendar_name = "Twin Cities Arthouse Movie Calendar"
+timezone = "America/Chicago"
+site_url = "https://twin-cities-movies.innocence.com/"
+
+[Theaters]
+trylon = "Trylon Cinema"
+themain = "The Main Cinema"
