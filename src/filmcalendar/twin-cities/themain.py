@@ -23,63 +23,61 @@ class FilmCalendarTheMainCinema(filmcalendar.FilmCalendar):
         return super().__str__()
 
     def _scrape_and_save_film_page(self, film_url, headers):
-        duration_minutes_re = re.compile(r"(\d+)m")
-        duration_re = re.compile(
-            r"^\([\d\-\u2010\u2011\u2012\u2013\u2014\u2015]{4,},.* \d+m.*\)"
-        )
         film_location = f"{self.theater}: {self.address}"
-        # Note: in theory Trylon does showings at the Heights, too, so keep
-        # an eye on this simplification.
+        clean_date_re = re.compile(r"(\d+)(?:st|nd|rd|th)\b", re.I)
 
         try:
             logger.info(f"Fetching film page: {film_url}")
             req = requests.get(film_url, headers=headers, timeout=30)
             req.raise_for_status()
         except Exception as e:
-            logger.error(f"Error fetching Trylon Cinema film page: {e}")
+            logger.error(f"Error fetching Main Cinema film page: {e}")
             raise
 
         soup = BeautifulSoup(req.text, "html.parser")
 
-        film_title = soup.find("h1", class_="single-event-title").get_text()
+        film_title = (
+            soup.find("h1", class_="gecko-single-show__title").get_text().strip()
+        )
 
-        # Film duration is pretty non-structured so here's a lot of effort to extract it
+        # Assuming the "XXX min" format is consistent here.
+        film_duration_element = soup.find("span", string="Runtime:").find_next_sibling()
 
-        # The horrible regex is because Trylon film pages sometimes use en-dash as
-        # opposed to a bare dash, so there's I use this horrible escaped bit to
-        # catch every possible dash.
-        film_duration_element = soup.find("strong", string=duration_re)
         if film_duration_element:
             film_duration_str = film_duration_element.get_text()
         else:
             # Fallback for duration is 120 minutes
             logger.info(f"Duration not found for {film_url}")
-            film_duration_str = "120m"
-
+            film_duration_str = "120 min"
         try:
-            film_duration = timedelta(
-                minutes=int(duration_minutes_re.search(film_duration_str).group(1))
-            )
-        except Exception as e:
-            logger.error(
-                f"{e} while getting duration for {film_url} from {film_duration_str}"
-            )
+            film_duration = timedelta(minutes=int(film_duration_str[:-3]))
+        except ValueError:
+            logger.info(f"{film_duration_str} could not be converted to int")
             film_duration = timedelta(minutes=120)
 
         # On to showtimes
-        for showtime in soup.find_all("div", class_="mt-ticket-field"):
-            # As of time of coding, only one label per showtime div
-            try:
-                showtime_date = datetime.strptime(
-                    showtime.find("label").get_text(),
-                    "%a %b %d, %Y, %I:%M %p",
-                    # "Sun Jul 26, 2026, 1:00 pm"
-                )
-                showtime_date = self.timezone.localize(showtime_date)
-            except Exception as e:
-                logger.error(f"Error: {e} getting showtimes from {film_url}")
+        current_year = datetime.now(tz=self.timezone).year
+        for showtime_day in soup.find_all("div", class_="gecko-show-events__day"):
+            date_str = showtime_day.find(
+                "h3", class_="gecko-show-events__date"
+            ).get_text()
+            date_str = clean_date_re.sub(r"\1", f"{date_str} {current_year}")
 
-            if showtime_date > self.timezone.localize(datetime.now()):
+            for showtime_time in showtime_day.find_all(
+                "button", class_="gecko-show-events__showtime"
+            ):
+                time_str = showtime_time.get_text().strip()
+
+                try:
+                    showtime_date = datetime.strptime(
+                        f"{date_str} {time_str}",
+                        "%A, %B %d %Y %I:%M %p",
+                        # "Saturday, August 8th 2026 3:40 pm"
+                    )
+                    showtime_date = self.timezone.localize(showtime_date)
+                except Exception as e:
+                    logger.error(f"Error: {e} getting showtimes from {film_url}")
+
                 self.add_event(
                     summary=film_title,
                     dtstart=showtime_date,
@@ -117,11 +115,10 @@ class FilmCalendarTheMainCinema(filmcalendar.FilmCalendar):
         # dynamically: ?page=now-showing or ?page=coming-soon
         film_pages = []
         film_pages.extend(self._fetch_film_group(headers, "now-showing"))
-        film_pages.extend(self._fetch_film_group(headers, "coming-soon"))
+        # FIX ME: uncomment
+        # film_pages.extend(self._fetch_film_group(headers, "coming-soon"))
         logger.info(f"Found {len(film_pages)} movie pages to scrape")
-        print(f"Found {len(film_pages)} movie pages to scrape")
 
-        return
         # Step 2: Scrape each individual movie page
         # for movie in film_showings:
         for film_url in film_pages:
