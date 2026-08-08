@@ -89,7 +89,6 @@ class FilmCalendarTheMainCinema(filmcalendar.FilmCalendar):
     def _fetch_film_group(self, headers, group):
         """Fetch now playing or coming soon using the WP API"""
         group_url = f"{self.calendar_api_url}?page={group}"
-        print(f"scraping {group_url}")
         try:
             logger.info(f"Fetching calendar page: {group_url}")
             req = requests.get(group_url, headers=headers, timeout=30)
@@ -115,8 +114,7 @@ class FilmCalendarTheMainCinema(filmcalendar.FilmCalendar):
         # dynamically: ?page=now-showing or ?page=coming-soon
         film_pages = []
         film_pages.extend(self._fetch_film_group(headers, "now-showing"))
-        # FIX ME: uncomment
-        # film_pages.extend(self._fetch_film_group(headers, "coming-soon"))
+        film_pages.extend(self._fetch_film_group(headers, "coming-soon"))
         logger.info(f"Found {len(film_pages)} movie pages to scrape")
 
         # Step 2: Scrape each individual movie page
