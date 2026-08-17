@@ -80,7 +80,7 @@ class FilmCalendar:
         event.add("dtstamp", vDatetime(datetime.now(tz=self.timezone)))
 
         uid_hash = xxhash.xxh64()
-        uid_hash.update(f"{dtstart}-{url}")
+        uid_hash.update(f"{dtstart}-{url}".encode())
         event.add("uid", uid_hash.hexdigest())
 
         self.cal.add_component(event)
