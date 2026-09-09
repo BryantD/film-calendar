@@ -35,8 +35,8 @@ class FilmCalendarTheHeightsTheater(filmcalendar.FilmCalendar):
 
         film_title = soup.find("h1").get_text()
 
-        runtime_span = soup.find("label", string="Run Time: ")
         try:
+            runtime_span = soup.find("label", string="Run Time: ")
             runtime_string = runtime_span.next_sibling.get_text().split()[0]
             film_duration = timedelta(minutes=int(runtime_string))
         except Exception as e:
@@ -63,20 +63,7 @@ class FilmCalendarTheHeightsTheater(filmcalendar.FilmCalendar):
                     location=film_location,
                 )
 
-    def fetch_films(self):
-        """Fetch films from The Heights."""
-        headers = {
-            "User-Agent": self.req_headers.get(
-                "user-agent",
-                "movie-calendar/1.6.0 (https://github.com/BryantD/film-calendar)",
-            ),
-        }
-
-        # Step 1: scrape showings -- current month and next month
-        today = datetime.today()
-        year = today.year
-        month = today.strftime("%B").lower()
-
+    def _fetch_calendar(self, headers, month, year):
         try:
             logger.info(f"Fetching calendar page: {self.calendar_url}/{month}/{year}")
             req = requests.get(self.calendar_url, headers=headers, timeout=30)
@@ -103,6 +90,30 @@ class FilmCalendarTheHeightsTheater(filmcalendar.FilmCalendar):
                 film_pages.append(film_url)
 
         logger.info(f"Found {len(film_pages)} movie pages to scrape")
+        return film_pages
+
+    def fetch_films(self):
+        """Fetch films from The Heights."""
+        headers = {
+            "User-Agent": self.req_headers.get(
+                "user-agent",
+                "movie-calendar/1.6.0 (https://github.com/BryantD/film-calendar)",
+            ),
+        }
+
+        # Step 1: scrape showings -- current month and next month
+        today = datetime.today()
+        year = today.year
+        month = today.strftime("%B").lower()
+        film_pages = self._fetch_calendar(headers, month, year)
+
+        # Cheaty hacks to avoid taking a dependency on the dateutil
+        # Set the day in today to the first of the month, then add 32
+        # days to move into the next month
+        next_month = today.replace(day=1) + timedelta(days=32)
+        year = next_month.year
+        month = next_month.strftime("%B").lower()
+        film_pages.extend(self._fetch_calendar(headers, month, year))
 
         # Step 2: Scrape each individual movie page
         for film_url in film_pages:
