@@ -43,7 +43,9 @@ class FilmCalendarTheHeightsTheater(filmcalendar.FilmCalendar):
             logger.error(f"Error: {e} parsing showtime from {film_url}")
 
         # On to showtimes -- beautiful HTML here, thanks Heights
-        for showtime in soup.find_all("time"):
+        for showtime in soup.select("time:not(.visually-hidden)"):
+            # Not my usual find_all but select allows me to screen out
+            # the hidden time tags
             try:
                 showtime_date = datetime.strptime(
                     showtime["datetime"],
@@ -114,6 +116,7 @@ class FilmCalendarTheHeightsTheater(filmcalendar.FilmCalendar):
         year = next_month.year
         month = next_month.strftime("%B").lower()
         film_pages.extend(self._fetch_calendar(headers, month, year))
+        film_pages = list(set(film_pages))
 
         # Step 2: Scrape each individual movie page
         for film_url in film_pages:
