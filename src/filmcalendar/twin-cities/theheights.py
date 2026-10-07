@@ -40,7 +40,8 @@ class FilmCalendarTheHeightsTheater(filmcalendar.FilmCalendar):
             runtime_string = runtime_span.next_sibling.get_text().split()[0]
             film_duration = timedelta(minutes=int(runtime_string))
         except Exception as e:
-            logger.error(f"Error: {e} parsing showtime from {film_url}")
+            logger.info(f"Couldn't parse showtime from {film_url}: {e}")
+            film_duration = timedelta(minutes=120)
 
         # On to showtimes -- beautiful HTML here, thanks Heights
         for showtime in soup.select("time:not(.visually-hidden)"):
