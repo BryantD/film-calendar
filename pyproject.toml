@@ -12,7 +12,7 @@ dependencies = [
     "icalendar==7.3.0",
     "pytz==2026.4",
     "requests==2.34.2",
-    "tomli==2.4.1",
+    "tomli==2.5.0",
     "xxhash==4.0.1",
 ]
 
