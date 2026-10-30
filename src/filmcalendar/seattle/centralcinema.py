@@ -36,16 +36,19 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         return timedelta(hours=hours, minutes=minutes)
 
     def parse_showtime_text(self, text):
-        """Parse showtime text like 'October 21, 9:30 pm' to datetime."""
-        # Handle formats like "October 21, 9:30 pm" or "November 1, 4:00 pm"
-        match = re.match(r"(\w+)\s+(\d+),\s+(\d+):(\d+)\s+(am|pm)", text.strip())
+        """Parse showtime text like 'Sunday, October 21, 2026, 9:30 pm' to datetime."""
+        match = re.match(
+            r"(\w+),\s+(\w+)\s+(\d+),\s(\d+),\s+(\d+):(\d+)\s+(am|pm)",
+            text.strip(),
+        )
         if not match:
             return None
 
-        month_name, day, hour, minute, meridiem = match.groups()
+        weekday, month_name, day, year, hour, minute, meridiem = match.groups()
         hour = int(hour)
         minute = int(minute)
         day = int(day)
+        year = int(year)
 
         # Convert to 24-hour format
         if meridiem.lower() == "pm" and hour != 12:
@@ -72,12 +75,12 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         if not month:
             return None
 
-        # Determine year (assume current year, or next year if month has passed)
-        now = datetime.now()
-        year = now.year
-        # If the month is before current month, assume next year
-        if month < now.month:
-            year += 1
+        # # Determine year (assume current year, or next year if month has passed)
+        # now = datetime.now()
+        # year = now.year
+        # # If the month is before current month, assume next year
+        # if month < now.month:
+        #     year += 1
 
         try:
             dt = datetime(year, month, day, hour, minute)
@@ -125,15 +128,16 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
 
         # Step 2: Scrape each individual movie page
         for movie_url in movie_links:
-            try:
-                self._scrape_movie_page(movie_url, headers)
-            except Exception as e:
-                logger.warning(f"Error scraping movie page {movie_url}: {e}")
-                continue
+            if not "private-rental-event" in movie_url:
+                try:
+                    self._scrape_movie_page(movie_url, headers)
+                except Exception as e:
+                    logger.warning(f"Error scraping movie page {movie_url}: {e}")
+                    continue
 
     def _scrape_movie_page(self, url, headers):
         """Scrape an individual movie page for showtime data."""
-        logger.debug(f"Scraping movie page: {url}")
+        logger.info(f"Scraping movie page: {url}")
 
         try:
             req = requests.get(url, headers=headers, timeout=30)
@@ -152,14 +156,16 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
             try:
                 data = json.loads(script.string)
                 # Look for Movie schema
-                if isinstance(data, dict) and data.get("@type") == "Movie":
+                if isinstance(data, dict) and (
+                    data.get("@type") == "Movie" or data.get("@type") == "MovieTheater"
+                ):
                     movie_data = data
                     break
             except (json.JSONDecodeError, AttributeError):
                 continue
 
         if not movie_data:
-            logger.warning(f"No JSON-LD movie data found on {url}")
+            logger.warning(f"No parsable JSON-LD movie data found on {url}")
             # Try to get title from page as fallback
             title_tag = soup.find("h1")
             film_title = title_tag.get_text(strip=True) if title_tag else "Unknown Film"
@@ -169,27 +175,32 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
             duration_str = movie_data.get("duration", "")
             film_duration = self.parse_iso_duration(duration_str)
 
-        # Find all showtime links
-        showtime_links = soup.find_all("a", href=re.compile(r"/checkout/showing/"))
+        # Find all showtime links -- first iterate through the h3 tags
+        # This feels a bit fragile but I don't think I can count on the random
+        # classes to stay associated with days
+        h3_tags = soup.find_all("h3")
+        for day in h3_tags:
+            day_string = day.get_text(strip=True)
 
-        if not showtime_links:
-            logger.debug(f"No showtimes found for {film_title}")
-            return
+            showtime_links = day.parent.find_all(
+                "a", href=re.compile(r"/checkout/showing/")
+            )
 
-        logger.info(f"Processing {len(showtime_links)} showtimes for {film_title}")
-        film_location = f"{self.theater}: {self.address}"
+            if not showtime_links:
+                logger.debug(f"No showtimes found for {film_title} on {day}")
+                next
 
-        for link in showtime_links:
-            showtime_text = link.get_text(strip=True)
-            showtime_dt = self.parse_showtime_text(showtime_text)
-
-            if showtime_dt:
-                self.add_event(
-                    summary=film_title,
-                    dtstart=showtime_dt,
-                    duration=film_duration,
-                    url=url,
-                    location=film_location,
-                )
-            else:
-                logger.warning(f"Could not parse showtime: {showtime_text}")
+            logger.info(f"Processing {len(showtime_links)} showtimes for {film_title}")
+            for link in showtime_links:
+                showtime_text = day_string + ", " + link.get_text(strip=True)
+                showtime_dt = self.parse_showtime_text(f"{showtime_text}")
+                if showtime_dt:
+                    self.add_event(
+                        summary=film_title,
+                        dtstart=showtime_dt,
+                        duration=film_duration,
+                        url=url,
+                        location=f"{self.theater}: {self.address}",
+                    )
+                else:
+                    logger.warning(f"Could not parse showtime: {showtime_text}")
