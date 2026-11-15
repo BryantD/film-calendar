@@ -44,10 +44,7 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         return True
 
     def _fetch_gql_for_date(self, date):
-        transport = RequestsHTTPTransport(
-            url=self.gql_url,
-            headers=self.gql_headers
-        )
+        transport = RequestsHTTPTransport(url=self.gql_url, headers=self.gql_headers)
         client = Client(transport=transport, fetch_schema_from_transport=False)
 
         # Every showing at the theater on one (local) date, movie included
@@ -68,19 +65,21 @@ class FilmCalendarCentralCinema(filmcalendar.FilmCalendar):
         """)
 
         logger.info(f"Fetching showings for: {date}")
-        SHOWINGS_FOR_DATE.variable_values = {"date": date}   # omit movieId for all films
+        SHOWINGS_FOR_DATE.variable_values = {"date": date}  # omit movieId for all films
         movies = client.execute(SHOWINGS_FOR_DATE)
 
         for movie in movies["showingsForDate"]["data"]:
-            logger.info(f"Adding: {movie["movie"]["name"]}")
-            if (not movie["past"] and movie["published"]):
+            logger.info(f"Adding: {movie['movie']['name']}")
+            if not movie["past"] and movie["published"]:
                 self.add_event(
-                        summary=movie["movie"]["name"],
-                        dtstart=datetime.fromisoformat(movie["time"]),
-                        duration=timedelta(minutes=movie["movie"]["duration"]),
-                        url=f"{self.base_url}/movie/{movie['movie']['urlSlug']}/",
-                        location=f"{self.theater}: {self.address}",
+                    summary=movie["movie"]["name"],
+                    dtstart=datetime.fromisoformat(movie["time"]),
+                    duration=timedelta(minutes=movie["movie"]["duration"]),
+                    url=f"{self.base_url}/movie/{movie['movie']['urlSlug']}/",
+                    location=f"{self.theater}: {self.address}",
                 )
             else:
-                logger.info(f"Skipped {movie["movie"]["name"]}: past = {movie["past"]}, published = {movie["published"]}")
+                logger.info(
+                    f"Skipped {movie['movie']['name']}: past = {movie['past']}, published = {movie['published']}"
+                )
         return
