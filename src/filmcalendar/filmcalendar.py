@@ -15,6 +15,11 @@ class FilmCalendar:
         timezone="US/Pacific",
         site_url="https://github.com/BryantD/film-calendar",
     ):
+        try:
+            self.__version__ = version("film-calendar")
+        except PackageNotFoundError:  # running from source, not installed
+            self.__version__ = "0.0.0+unknown"
+
         self.timezone_string = timezone
         try:
             self.timezone = pytz.timezone(self.timezone_string)
@@ -28,26 +33,13 @@ class FilmCalendar:
 
         self.site_url = site_url
 
-        self.req_headers = {"user-agent": f"movie-calendar/1.1 ({site_url})"}
+        self.req_headers = {"user-agent": f"movie-calendar/{self.__version__} ({site_url})"}
 
         self.cal = Calendar()
         self.cal.add("version", "2.0")
         self.cal.add("prodid", f"-//{calendar_name}//NONSGML Event Calendar//EN")
         self.cal.add("x-wr-calname", calendar_name)
         self.cal.add("x-wr-timezone", self.timezone_string)
-
-        # Version:
-        try:
-            self.__version__ = version("film-calendar")
-        except PackageNotFoundError:  # running from source, not installed
-            self.__version__ = "0.0.0+unknown"
-
-    # def __str__(self):
-    #     cal_string = self.cal.to_ical()
-    #     return cal_string.decode("utf-8")
-
-    # def __len__(self):
-    #     return len(self.cal.walk(name="vevent"))
 
     def append_filmcalendar(self, calendar):
         for event in calendar.cal.walk(name="vevent"):
