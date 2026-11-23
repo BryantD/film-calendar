@@ -9,7 +9,7 @@ dependencies = [
     "click==8.5.1",
     "feedgenerator==2.2.1",
     "gql[requests]>=4.0.0",
-    "icalendar==7.3.0",
+    "icalendar==7.3.2",
     "pytz==2026.6",
     "requests==2.34.2",
     "tomli==2.5.0",
